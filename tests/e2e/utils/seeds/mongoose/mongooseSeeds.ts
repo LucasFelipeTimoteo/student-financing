@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import userFixture from '../../../../../src/global/fixtures/user/user.json';
-import { pinoLogger } from "../../../../../src/infra/pino/pinoLogger";
+import { pinoLogger } from "../../../../../src/infra/logger/pino/pinoLogger";
 import { UsersModel } from "../../../../../src/infra/services/db/mongoose/models/usersModel/usersModelMongoose";
 import { MongooseService } from "../../../../../src/infra/services/db/mongoose/mongooseService";
 import { usersSchemaMongoose } from '../../../../../src/infra/services/db/mongoose/schema/usersSchemaMongoose';
