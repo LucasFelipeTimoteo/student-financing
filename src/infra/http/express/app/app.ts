@@ -4,22 +4,23 @@ import helmet from "helmet";
 import type { logger } from "../../../../application/logger/logger";
 // import { ExpressErrorHandlerMiddleware } from "../middlewares/errorHandling/expressErrorHandlerMiddleware";
 import { corsConfigMiddleware } from "../../middlewares/utils/cors/corsMiddlewareConfig";
-// import type { StudentsRouter } from "../routers/users/studentsRouter";
+import type { AuthRouter } from "../routers/auth/authRouter";
 
 export class ExpressApp {
   constructor(
-    // private usersRouter: StudentsRouter,
+    private authRouter: AuthRouter,
     private logger: logger,
   ) { }
 
   exec() {
-    // const usersRouter = this.usersRouter.exec();
+    const AuthRouter = this.authRouter.exec();
     const app = express();
+
     app.use(express.json());
     app.use(helmet());
     app.use(httpCompress());
     app.use(corsConfigMiddleware());
-    // app.use(usersRouter);
+    app.use(AuthRouter);
     app.get("/health", this.#healthCheck);
 
     // const expressErrorHandling = new ExpressErrorHandlerMiddleware(

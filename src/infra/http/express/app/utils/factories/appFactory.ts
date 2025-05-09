@@ -1,27 +1,20 @@
+import { AuthController } from "../../../../../../adapters/controllers/auth/authController";
 import { pinoLogger } from "../../../../../logger/pino/pinoLogger";
+import { AuthRouteHandler } from "../../../routehandlers/auth/authRoutehandler";
+import { AuthRouter } from "../../../routers/auth/authRouter";
 import { ExpressApp } from "../../app";
 
 export const Appfactory = (
-  {
-    logger = pinoLogger,
-    // usersModel = UsersModel(),
-    // passwordHasher = new HashPasswordBcrypt(),
-    // usersCacheRepository = new UsersCacheRepositoryRedis(cacheClient),
-    // usersRepository = new UsersRepositoryMongoose(usersModel, passwordHasher),
-    // jwtTokens = new JWTTokensByJsonWebTokenLib(),
-    // usersController = new UsersController(
-    // 	usersRepository,
-    // 	usersCacheRepository,
-    // 	logger,
-    // 	passwordHasher,
-    // 	jwtTokens,
-    // 	aes256cbc,
-    // ),
-    // usersRouteHandler = new usersRouteHandlerExpress(usersController),
-    // usersRouter = new UsersRouter(usersRouteHandler),
-  },
+  logger = pinoLogger,
+  authController = new AuthController(logger),
+  authRouteHandler = new AuthRouteHandler(authController),
+  authRouter = new AuthRouter(authRouteHandler)
 ) => {
-  const app = new ExpressApp(logger);
+
+  const app = new ExpressApp(
+    authRouter,
+    logger
+  );
 
   return app;
 };
