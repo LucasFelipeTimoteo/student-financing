@@ -7,7 +7,7 @@ class DotenvEnvParser implements EnvParser {
   parseEnvFileToObj(envFilePath: string) {
     const resolvedPath = resolve(envFilePath);
     const envFile = readFileSync(resolvedPath);
-    const parsedEnv = parse(envFile);
+    const parsedEnv = parse(envFile) as unknown;
 
     return parsedEnv;
   }

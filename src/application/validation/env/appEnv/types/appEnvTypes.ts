@@ -9,6 +9,11 @@ export type EnvValues = {
   REFRESH_TOKEN_TTL_DAYS: string;
   ACCESS_TOKEN_TTL_MINUTES: string;
   SALT: string;
+  DATABASE_PORT: number;
+  DATABASE_NAME: string;
+  DATABASE_HOST: string;
+  DATABASE_USER: string;
+  DATABASE_PASSWORD?: string;
 };
 
 export type NodeEnvs = "production" | "development" | "test";

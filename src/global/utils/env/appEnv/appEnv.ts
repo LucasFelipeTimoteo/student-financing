@@ -19,6 +19,11 @@ export class AppEnv {
   refreshTokenTTLDays: string;
   accessTokenTTLMinutes: string;
   refreshTokenJwtSecret: string;
+  databasePort: number;
+  databaseName: string;
+  databaseHost: string;
+  databaseUser: string
+  databasePassword?: string
 
   constructor(
     appEnvValidator: AppEnvValidator,
@@ -69,6 +74,16 @@ export class AppEnv {
       this.envValues.REFRESH_TOKEN_JWT_SECRET,
       appEnvValidator,
     );
+
+    this.databaseHost = this.#stringValidation(this.envValues.DATABASE_HOST, appEnvValidator)
+
+    this.databaseName = this.#stringValidation(this.envValues.DATABASE_NAME, appEnvValidator)
+
+    this.databasePassword = this.envValues.DATABASE_NAME
+
+    this.databasePort = Number(this.#numericStringValidation(this.envValues.DATABASE_PORT, appEnvValidator))
+
+    this.databaseUser = this.#stringValidation(this.envValues.DATABASE_USER, appEnvValidator)
   }
 
   getValidatedEnvValues() {
