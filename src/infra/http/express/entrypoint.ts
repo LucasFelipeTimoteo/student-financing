@@ -1,5 +1,5 @@
 import type { logger } from "../../../application/logger/logger";
-import { appEnv } from "../../global/utils/env/appEnv/appEnv";
+import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 import type { ExpressApp } from "./app/app";
 // import { GracefullShutdownStrategyExecutor } from "../utils/gracefullShutdown/gracefullShutdownHandler";
 // import { gracefullShutdownHandlerClientSelector } from "../utils/gracefullShutdown/strategies/gracefullShutdownHandlerClientSelector";

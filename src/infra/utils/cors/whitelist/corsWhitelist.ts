@@ -1,4 +1,4 @@
-import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
+import { appEnv } from "../../../../global/utils/env/appEnv/appEnv";
 
 export const corsWhitelist = () => {
   const rawWhitelist = appEnv.corsWhitelist;

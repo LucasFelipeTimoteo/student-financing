@@ -1,6 +1,6 @@
 import pino from "pino";
 import type { logger } from "../../../application/logger/logger";
-import { appEnv } from "../../global/utils/env/appEnv/appEnv";
+import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 
 class PinoLogger implements logger {
   #isDevelopment = appEnv.nodeEnv === "development";

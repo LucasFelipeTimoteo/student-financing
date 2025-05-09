@@ -1,4 +1,4 @@
-import { DomainObjectError } from "../../../../errors/domainObjectsErrors/domainObjectErrors";
+import { DomainObjectError } from "../../../errors/domainObjectsErrors/domainObjectErrors";
 
 export class StudentError extends DomainObjectError {
   constructor(public message: string) {
