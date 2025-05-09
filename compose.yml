@@ -1,0 +1,34 @@
+services:
+  app:
+    container_name: finacing-simulation
+    image: financing-simulation:${NODE_ENV}
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: ${NODE_ENV}
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_HOST=postgres 
+      - DATABASE_PORT=5432
+      - DATABASE_USER=your_user
+      - DATABASE_PASSWORD=your_password
+      - DATABASE_NAME=your_database
+    depends_on:
+      - postgres
+
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: postgres
+    environment:
+      - POSTGRESQL_USERNAME=your_user
+      - POSTGRESQL_PASSWORD=your_password
+      - POSTGRESQL_DATABASE=your_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+volumes:
+  postgres_data:
