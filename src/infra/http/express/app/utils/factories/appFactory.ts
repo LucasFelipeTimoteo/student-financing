@@ -5,16 +5,12 @@ import { AuthRouter } from "../../../routers/auth/authRouter";
 import { ExpressApp } from "../../app";
 
 export const Appfactory = (
-  logger = pinoLogger,
-  authController = new AuthController(logger),
-  authRouteHandler = new AuthRouteHandler(authController),
-  authRouter = new AuthRouter(authRouteHandler)
+	logger = pinoLogger,
+	authController = new AuthController(logger),
+	authRouteHandler = new AuthRouteHandler(authController),
+	authRouter = new AuthRouter(authRouteHandler),
 ) => {
+	const app = new ExpressApp(authRouter, logger);
 
-  const app = new ExpressApp(
-    authRouter,
-    logger
-  );
-
-  return app;
+	return app;
 };

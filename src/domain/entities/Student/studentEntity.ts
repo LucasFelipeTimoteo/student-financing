@@ -5,11 +5,11 @@ import type { StudentLastName } from "../../value objects/student/studentLastNam
 import type { StudentPassword } from "../../value objects/student/studentPassword/studentPassword";
 
 export class StudentEntity {
-  constructor(
-    public readonly id: StudentId,
-    public readonly name: StudentFirstName,
-    public readonly lastName: StudentLastName,
-    public readonly email: StudentEmail,
-    public readonly password: StudentPassword
-  ) { }
+	constructor(
+		public readonly id: StudentId,
+		public readonly name: StudentFirstName,
+		public readonly lastName: StudentLastName,
+		public readonly email: StudentEmail,
+		public readonly password: StudentPassword,
+	) {}
 }

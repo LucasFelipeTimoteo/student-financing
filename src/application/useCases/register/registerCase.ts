@@ -1,17 +1,17 @@
 import { StudentRepositoryTypeORM } from "../../../infra/repository/studentRepositoryTypeORM";
 
-export class LoginCase {
-	async login() {
+export class RegisterCase {
+	async register() {
 		const repository = new StudentRepositoryTypeORM();
-		const user = repository.login("", "");
+		const user = repository.register("", "");
 
 		if (!user) {
 			return null;
 		}
 
 		return {
-			accessToken: "example-access-token",
-			refreshToken: "example-refresh-token",
+			accessToken: "register-example-access-token",
+			refreshToken: "eregister-xample-refresh-token",
 		};
 	}
 }

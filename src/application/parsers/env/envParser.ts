@@ -1,3 +1,3 @@
 export interface EnvParser {
-  parseEnvFileToObj(envFilePath: string): unknown;
+	parseEnvFileToObj(envFilePath: string): unknown;
 }

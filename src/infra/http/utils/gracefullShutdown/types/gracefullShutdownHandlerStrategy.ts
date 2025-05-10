@@ -1,3 +1,3 @@
 export interface GracefullShutdownHandlerStrategyType {
-  exec(): Promise<boolean>;
+	exec(): Promise<boolean>;
 }

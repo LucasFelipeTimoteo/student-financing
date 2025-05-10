@@ -1,3 +1,3 @@
 export interface ProtectInstanceErrorType {
-  message: string;
+	message: string;
 }
