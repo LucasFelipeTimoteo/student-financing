@@ -9,6 +9,6 @@
     "build"
   ],
   "execMap": {
-    "ts": "node -r sucrase/register"
+    "ts": "ts-node"
   }
 }

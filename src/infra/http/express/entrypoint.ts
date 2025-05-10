@@ -5,6 +5,7 @@ import type { ExpressApp } from "./app/app";
 // import { gracefullShutdownHandlerClientSelector } from "../utils/gracefullShutdown/strategies/gracefullShutdownHandlerClientSelector";
 // import type { ExpressApp } from "./app/app";
 import type {
+  EntrypointDatabaseClients,
   // EntrypointCacheDatabaseClients,
   // EntrypointDatabaseClients,
   HttpServer,
@@ -19,12 +20,11 @@ export class ExpressEntryPoint {
   constructor(
     private app: ExpressApp,
     private logger: logger,
-    // private mainDatabase: EntrypointDatabaseClients,
+    private mainDatabase: EntrypointDatabaseClients,
   ) { }
 
   async listen() {
-    // const { "0": mainDatabase, "1": cacheDatabase } =
-    //   await this.#startDatabases(this.mainDatabase, this.cacheDatabase);
+    const { "0": db, } = await this.#startDatabases(this.mainDatabase);
     const app = this.#configApp();
     const server = app.listen(this.port, () =>
       this.logger.info(this.listenMessage),
@@ -38,17 +38,10 @@ export class ExpressEntryPoint {
     return this.app.exec();
   }
 
-  // async #startDatabases(
-  //   dbClient: EntrypointDatabaseClients,
-  //   cacheClient: EntrypointCacheDatabaseClients,
-  // ) {
-  //   type DatabaseClientOrder = [
-  //     EntrypointDatabaseClients,
-  //     EntrypointCacheDatabaseClients,
-  //   ];
-  //   const databaseClients: DatabaseClientOrder = [dbClient, cacheClient];
-  //   return await Promise.all(databaseClients);
-  // }
+  async #startDatabases(dbClient: EntrypointDatabaseClients) {
+    const databaseClients = [dbClient];
+    return await Promise.all(databaseClients);
+  }
 
   // async gracefullShutdown(
   //   cacheDatabase: Awaited<EntrypointCacheDatabaseClients>,

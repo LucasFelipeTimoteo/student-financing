@@ -79,7 +79,7 @@ export class AppEnv {
 
     this.databaseName = this.#stringValidation(this.envValues.DATABASE_NAME, appEnvValidator)
 
-    this.databasePassword = this.envValues.DATABASE_NAME
+    this.databasePassword = this.envValues.DATABASE_PASSWORD
 
     this.databasePort = Number(this.#numericStringValidation(this.envValues.DATABASE_PORT, appEnvValidator))
 
