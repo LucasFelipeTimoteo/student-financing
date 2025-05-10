@@ -1,9 +1,8 @@
 import type { logger } from "../../../application/logger/logger";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
+import { gracefullShutdownHandlerClientSelector } from "../utils/gracefullShutdown/strategies/gracefullShutdownHandlerClientSelector";
 import type { ExpressApp } from "./app/app";
-// import { GracefullShutdownStrategyExecutor } from "../utils/gracefullShutdown/gracefullShutdownHandler";
-// import { gracefullShutdownHandlerClientSelector } from "../utils/gracefullShutdown/strategies/gracefullShutdownHandlerClientSelector";
-// import type { ExpressApp } from "./app/app";
+
 import type {
   EntrypointDatabaseClients,
   // EntrypointCacheDatabaseClients,
@@ -31,7 +30,7 @@ export class ExpressEntryPoint {
     );
 
     this.server = server;
-    // this.gracefullShutdown(cacheDatabase, mainDatabase, server);
+    await this.gracefullShutdown(db, server);
   }
 
   #configApp() {
@@ -43,35 +42,22 @@ export class ExpressEntryPoint {
     return await Promise.all(databaseClients);
   }
 
-  // async gracefullShutdown(
-  //   cacheDatabase: Awaited<EntrypointCacheDatabaseClients>,
-  //   mainDatabase: Awaited<EntrypointDatabaseClients>,
-  //   server: HttpServer,
-  // ) {
-  //   const mainDataBaseseClientStrategy =
-  //     await gracefullShutdownHandlerClientSelector("mongoose", mainDatabase);
+  async gracefullShutdown(
+    mainDatabase: Awaited<EntrypointDatabaseClients>,
+    server: HttpServer,
+  ) {
+    const mainDataBaseseClientStrategy =
+      await gracefullShutdownHandlerClientSelector("typeorm", mainDatabase, this.logger);
 
-  //   const cachedatabaseClientStrategy =
-  //     await gracefullShutdownHandlerClientSelector("redis", cacheDatabase);
+    for (const signal of this.gracefullShutdownSigs) {
+      process.on(signal, async () =>
+        server.close(async () => {
+          await mainDataBaseseClientStrategy.exec();
 
-  //   const databaseClientShutdown = new GracefullShutdownStrategyExecutor(
-  //     mainDataBaseseClientStrategy,
-  //   );
-
-  //   const cacheDatabaseClientShutdown = new GracefullShutdownStrategyExecutor(
-  //     cachedatabaseClientStrategy,
-  //   );
-
-  //   for (const signal of this.gracefullShutdownSigs) {
-  //     process.on(signal, async () =>
-  //       server.close(() => {
-  //         databaseClientShutdown.exec();
-  //         cacheDatabaseClientShutdown.exec();
-
-  //         this.logger.info("Gracefully close server");
-  //         process.exit(0);
-  //       }),
-  //     );
-  //   }
-  // }
+          this.logger.info("Gracefully close server.");
+          process.exit(0);
+        }),
+      );
+    }
+  }
 }
