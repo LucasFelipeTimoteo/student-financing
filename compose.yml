@@ -17,6 +17,8 @@ services:
       - DATABASE_NAME=${DATABASE_NAME}
     depends_on:
       - postgres
+    volumes:
+      - .:/usr/src/app
 
   postgres:
     image: bitnami/postgresql:latest
