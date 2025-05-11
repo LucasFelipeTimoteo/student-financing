@@ -1,5 +1,7 @@
+import { ServerError } from "../../application/errors/server/serverError";
 import type { logger } from "../../application/logger/logger";
 import type { StudentRepository } from "../../application/repository/student/studentRepository";
+import type { MessageResponse } from "../../application/responses/general/message/messageResponse";
 import { StudentEntity } from "../../domain/entities/Student/studentEntity";
 import type { StudentEmail } from "../../domain/value objects/student/studentEmail/studentEmail";
 import type { StudentFirstName } from "../../domain/value objects/student/studentFirstName/studentFirstName";
@@ -28,7 +30,7 @@ export class StudentRepositoryTypeORM implements StudentRepository {
 
 			return new StudentEntity(student);
 		} catch (error) {
-			throw Error("Unknown Server Error");
+			throw new ServerError("Unknown Server Error");
 		}
 	}
 
@@ -37,7 +39,7 @@ export class StudentRepositoryTypeORM implements StudentRepository {
 		lastName: StudentLastName,
 		email: StudentEmail,
 		hashedPassword: StudentPassword,
-	): Promise<StudentId> {
+	): Promise<StudentId | MessageResponse> {
 		const student = new Student();
 		student.firstName = firstName.value;
 		student.lastName = lastName.value;
@@ -53,10 +55,10 @@ export class StudentRepositoryTypeORM implements StudentRepository {
 			this.logger.debug(error);
 
 			if (!(error instanceof Error)) {
-				throw "unknow error";
+				throw new ServerError("Unknown server error");
 			}
 
-			throw Error("database error"); // crie um erro personalisado para o database aqui
+			return { message: "Invalid credentials. Consider using another e-mail" };
 		}
 	}
 }

@@ -2,8 +2,8 @@ import httpCompress from "compression";
 import express, { type Response } from "express";
 import helmet from "helmet";
 import type { logger } from "../../../../application/logger/logger";
-// import { ExpressErrorHandlerMiddleware } from "../middlewares/errorHandling/expressErrorHandlerMiddleware";
 import { corsConfigMiddleware } from "../../middlewares/utils/cors/corsMiddlewareConfig";
+import { ExpressErrorHandlerMiddleware } from "../middlewares/errorHandling/expressErrorHandlerMiddleware";
 import type { AuthRouter } from "../routers/auth/authRouter";
 
 export class ExpressApp {
@@ -23,11 +23,11 @@ export class ExpressApp {
 		app.use(AuthRouter);
 		app.get("/health", this.#healthCheck);
 
-		// const expressErrorHandling = new ExpressErrorHandlerMiddleware(
-		// 	app,
-		// 	this.logger,
-		// );
-		// expressErrorHandling.exec();
+		const expressErrorHandling = new ExpressErrorHandlerMiddleware(
+			app,
+			this.logger,
+		);
+		expressErrorHandling.exec();
 
 		return app;
 	}

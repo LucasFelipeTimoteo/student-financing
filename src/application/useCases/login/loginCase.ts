@@ -1,6 +1,7 @@
 import type { StudentEmail } from "../../../domain/value objects/student/studentEmail/studentEmail";
 import type { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
+import { ApiError } from "../../errors/api/apiError";
 import type { logger } from "../../logger/logger";
 import type { PasswordHasher } from "../../parsers/password/hasing/passwordHasher";
 import type { StudentRepository } from "../../repository/student/studentRepository";
@@ -22,7 +23,7 @@ export class LoginCase {
 		const loginResult = await this.studentRepository.login(this.email);
 
 		if ("message" in loginResult) {
-			return loginResult;
+			throw new ApiError(loginResult.message);
 		}
 
 		const isPasswordCorrect = await this.passwordHasher.compare(
@@ -34,7 +35,7 @@ export class LoginCase {
 			return { message: "Invalid credentials. Incorrect e-mail or password" };
 		}
 
-		this.logger.debug(`Successfully registered user: ${loginResult.id.value}`);
+		this.logger.debug(`Successfully login with user: ${loginResult.id.value}`);
 
 		const accessTokenTTLInSeconds = Number(appEnv.accessTokenTTLMinutes) * 60;
 		const refreshTokenTTLInSeconds =

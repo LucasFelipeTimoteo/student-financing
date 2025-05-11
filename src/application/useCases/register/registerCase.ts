@@ -3,6 +3,7 @@ import type { StudentFirstName } from "../../../domain/value objects/student/stu
 import type { StudentLastName } from "../../../domain/value objects/student/studentLastName/studentLastName";
 import { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
+import { ApiError } from "../../errors/api/apiError";
 import type { logger } from "../../logger/logger";
 import type { PasswordHasher } from "../../parsers/password/hasing/passwordHasher";
 import type { StudentRepository } from "../../repository/student/studentRepository";
@@ -35,9 +36,9 @@ export class RegisterCase {
 			hashedPassword,
 		);
 
-		// if ("message" in registerResult) {
-		//   return registerResult; // is error message
-		// }
+		if ("message" in registerResult) {
+			throw new ApiError(registerResult.message);
+		}
 
 		this.logger.debug(`Successfully registered user: ${registerResult.value}`);
 

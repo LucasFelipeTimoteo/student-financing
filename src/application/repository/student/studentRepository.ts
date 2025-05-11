@@ -13,5 +13,5 @@ export interface StudentRepository {
 		lastName: StudentLastName,
 		email: StudentEmail,
 		password: StudentPassword,
-	): Promise<StudentId>;
+	): Promise<StudentId | MessageResponse>;
 }

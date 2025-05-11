@@ -8,7 +8,7 @@ export class DomainObjectError extends Error {
 	};
 
 	constructor(public message: string) {
-		super(`\x1b[32m${message}aaaaaaa\x1b[0m`);
+		super(message);
 
 		Error.captureStackTrace(this, this.constructor);
 	}
