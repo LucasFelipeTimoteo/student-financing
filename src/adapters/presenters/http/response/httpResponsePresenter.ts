@@ -24,6 +24,20 @@ class HttpResponsePresenter {
 			body: data,
 		};
 	}
+
+	unauthorized<T>(data: T): HttpResponse<T> {
+		return {
+			status: HttpResponseStatuses.unauthorized,
+			body: data,
+		};
+	}
+
+	forbidden<T>(data: T): HttpResponse<T> {
+		return {
+			status: HttpResponseStatuses.forbidden,
+			body: data,
+		};
+	}
 }
 
 export const httpResponsePresenter = new HttpResponsePresenter();

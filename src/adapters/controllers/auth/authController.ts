@@ -63,10 +63,6 @@ export class AuthController {
 		);
 		const registerResult = await registerCase.register();
 
-		// if ("message" in registerResult) {
-		// 	return httpResponsePresenter.badRequest(registerResult);
-		// }
-
 		return httpResponsePresenter.ok(registerResult);
 	}
 }
