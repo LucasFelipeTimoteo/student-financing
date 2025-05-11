@@ -1,4 +1,4 @@
-import { StudentError } from "../../../entities/Student/errors/student";
+import { StudentError } from "../../../entities/Student/errors/studentError";
 
 export class StudentLastName {
 	constructor(public readonly value: string) {
@@ -14,7 +14,7 @@ export class StudentLastName {
 
 		if (value.length < 2) {
 			throw new StudentError(
-				`lastName should have a length of at least 2, but received ${value.length}`,
+				`lastName should have a length of at least 2, but received ${value.length} with value: ${value}`,
 			);
 		}
 	}

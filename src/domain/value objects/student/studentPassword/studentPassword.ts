@@ -1,4 +1,4 @@
-import { StudentError } from "../../../entities/Student/errors/student";
+import { StudentError } from "../../../entities/Student/errors/studentError";
 
 export class StudentPassword {
 	constructor(public readonly value: string) {
@@ -14,7 +14,7 @@ export class StudentPassword {
 
 		if (value.length < 8) {
 			throw new StudentError(
-				`Password should have at least 8 characters, but received ${value.length} from: ${value}`,
+				`Password should have at least 8 characters, but received ${value.length}`,
 			);
 		}
 	}

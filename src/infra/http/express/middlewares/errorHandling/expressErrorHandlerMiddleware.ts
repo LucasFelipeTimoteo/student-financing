@@ -5,7 +5,7 @@ import type { appErrors } from "../../../../../application/errors/appErrors/appE
 import { ServerError } from "../../../../../application/errors/server/serverError";
 import type { logger } from "../../../../../application/logger/logger";
 import { JWTTokensError } from "../../../../../application/tokens/jwt/errors/JWTTokensError";
-import { StudentError } from "../../../../../domain/entities/Student/errors/student";
+import { StudentError } from "../../../../../domain/entities/Student/errors/studentError";
 
 export class ExpressErrorHandlerMiddleware {
 	constructor(
@@ -80,7 +80,7 @@ export class ExpressErrorHandlerMiddleware {
 			(err: appErrors, _: unknown, res: Response, next: NextFunction) => {
 				this.logger.error(err);
 				return res.status(500).json({
-					message: "Unexpected unknown error. Cannot process request",
+					message: "Unexpected unknown error. Cannot process the request",
 				});
 			},
 		);

@@ -1,4 +1,4 @@
-import type { StudentError } from "../../../domain/entities/Student/errors/student";
+import type { StudentError } from "../../../domain/entities/Student/errors/studentError";
 import type { JWTTokensError } from "../../tokens/jwt/errors/JWTTokensError";
 import type { ApiError } from "../api/apiError";
 import type { ApiValidationError } from "../apiValidation/apiValidationError";

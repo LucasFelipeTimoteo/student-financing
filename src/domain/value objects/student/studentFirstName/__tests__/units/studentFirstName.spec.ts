@@ -1,4 +1,4 @@
-import { StudentError } from "../../../../../entities/Student/errors/student";
+import { StudentError } from "../../../../../entities/Student/errors/studentError";
 import { StudentFirstName } from "../../studentFirstName";
 
 describe("StudentFirstName", () => {

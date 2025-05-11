@@ -1,4 +1,4 @@
-import { StudentError } from "../../../entities/Student/errors/student";
+import { StudentError } from "../../../entities/Student/errors/studentError";
 
 export class StudentEmail {
 	constructor(public readonly value: string) {
