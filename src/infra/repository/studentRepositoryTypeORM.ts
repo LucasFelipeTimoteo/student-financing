@@ -1,35 +1,62 @@
+import type { logger } from "../../application/logger/logger";
 import type { StudentRepository } from "../../application/repository/student/studentRepository";
 import { StudentEntity } from "../../domain/entities/Student/studentEntity";
-import { StudentEmail } from "../../domain/value objects/student/studentEmail/studentEmail";
-import { StudentFirstName } from "../../domain/value objects/student/studentFirstName/studentFirstName";
+import type { StudentEmail } from "../../domain/value objects/student/studentEmail/studentEmail";
+import type { StudentFirstName } from "../../domain/value objects/student/studentFirstName/studentFirstName";
 import { StudentId } from "../../domain/value objects/student/studentId/studentId";
-import { StudentLastName } from "../../domain/value objects/student/studentLastName/studentLastName";
-import { StudentPassword } from "../../domain/value objects/student/studentPassword/studentPassword";
+import type { StudentLastName } from "../../domain/value objects/student/studentLastName/studentLastName";
+import type { StudentPassword } from "../../domain/value objects/student/studentPassword/studentPassword";
+import type { EntrypointDatabaseClients } from "../http/express/types/entrypoint/entrypointTypes";
+import { Student } from "./typeORM/entity/Student";
 
 export class StudentRepositoryTypeORM implements StudentRepository {
-	async login(
-		username: string,
-		hashedPassword: string,
-	): Promise<StudentEntity | null> {
-		return new StudentEntity(
-			new StudentId("sas"),
-			new StudentFirstName("lucas"),
-			new StudentLastName("timoteo"),
-			new StudentEmail("email@email.com"),
-			new StudentPassword("12345"),
-		);
+	constructor(
+		private logger: logger,
+		private client: EntrypointDatabaseClients,
+	) {}
+
+	async login(email: StudentEmail) {
+		try {
+			const typeORMClient = await this.client;
+
+			const student = await typeORMClient.manager.findOne(Student, {
+				where: { email: email.value },
+			});
+			if (!student) {
+				return { message: "Invalid credentials. Incorrect e-mail or password" };
+			}
+
+			return new StudentEntity(student);
+		} catch (error) {
+			throw Error("Unknown Server Error");
+		}
 	}
 
 	async register(
-		username: string,
-		hashedPassword: string,
-	): Promise<StudentEntity | null> {
-		return new StudentEntity(
-			new StudentId("sas"),
-			new StudentFirstName("lucas"),
-			new StudentLastName("timoteo"),
-			new StudentEmail("email@email.com"),
-			new StudentPassword("12345"),
-		);
+		firstName: StudentFirstName,
+		lastName: StudentLastName,
+		email: StudentEmail,
+		hashedPassword: StudentPassword,
+	): Promise<StudentId> {
+		const student = new Student();
+		student.firstName = firstName.value;
+		student.lastName = lastName.value;
+		student.email = email.value;
+		student.password = hashedPassword.value;
+
+		try {
+			const typeORMClient = await this.client;
+			const newUser = await typeORMClient.manager.save(student);
+
+			return new StudentId(newUser.id);
+		} catch (error) {
+			this.logger.debug(error);
+
+			if (!(error instanceof Error)) {
+				throw "unknow error";
+			}
+
+			throw Error("database error"); // crie um erro personalisado para o database aqui
+		}
 	}
 }

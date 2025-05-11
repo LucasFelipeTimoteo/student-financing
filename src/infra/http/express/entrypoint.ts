@@ -5,8 +5,6 @@ import type { ExpressApp } from "./app/app";
 
 import type {
 	EntrypointDatabaseClients,
-	// EntrypointCacheDatabaseClients,
-	// EntrypointDatabaseClients,
 	HttpServer,
 } from "./types/entrypoint/entrypointTypes";
 

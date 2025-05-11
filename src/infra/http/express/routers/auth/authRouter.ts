@@ -2,7 +2,7 @@ import { Router } from "express";
 import type { AuthRouteHandler } from "../../routehandlers/auth/authRoutehandler";
 
 export class AuthRouter {
-	baseRoutePath = "/auth";
+	baseRoutePath = "/api";
 
 	constructor(private authRouteHandler: AuthRouteHandler) {
 		this.#autoBindMethods(this.authRouteHandler);

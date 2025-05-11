@@ -14,7 +14,7 @@ export class StudentPassword {
 
 		if (value.length < 8) {
 			throw new StudentError(
-				`Password should have at least 8 characters, but received ${value.length}`,
+				`Password should have at least 8 characters, but received ${value.length} from: ${value}`,
 			);
 		}
 	}

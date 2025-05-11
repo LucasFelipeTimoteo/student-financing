@@ -18,7 +18,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - .:/usr/src/app
+      - .:/app
 
   postgres:
     image: bitnami/postgresql:latest

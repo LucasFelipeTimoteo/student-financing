@@ -7,14 +7,16 @@ export interface AccessTokenRefreshExpressRequest {
 
 export interface LoginExpressRequest {
 	body: {
-		username: string;
+		email: string;
 		password: string;
 	};
 }
 
 export interface RegisterExpressRequest {
 	body: {
-		username: string;
+		firstName: string;
+		lastName: string;
+		email: string;
 		password: string;
 	};
 }

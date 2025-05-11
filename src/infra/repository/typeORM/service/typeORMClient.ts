@@ -12,7 +12,7 @@ export class TypeORMClient {
 		username: appEnv.databaseUser,
 		password: appEnv.databasePassword,
 		database: appEnv.databaseName,
-		synchronize: true,
+		synchronize: appEnv.nodeEnv !== "production",
 		logging: false,
 		entities: [Student],
 		migrations: [],

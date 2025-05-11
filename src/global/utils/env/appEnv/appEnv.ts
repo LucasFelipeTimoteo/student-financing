@@ -24,6 +24,7 @@ export class AppEnv {
 	databaseHost: string;
 	databaseUser: string;
 	databasePassword?: string;
+	databaseUrl: string;
 
 	constructor(
 		appEnvValidator: AppEnvValidator,
@@ -96,6 +97,11 @@ export class AppEnv {
 
 		this.databaseUser = this.#stringValidation(
 			this.envValues.DATABASE_USER,
+			appEnvValidator,
+		);
+
+		this.databaseUrl = this.#stringValidation(
+			this.envValues.DATABASE_URL,
 			appEnvValidator,
 		);
 	}

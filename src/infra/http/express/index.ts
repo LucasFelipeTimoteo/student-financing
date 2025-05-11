@@ -3,13 +3,9 @@ import { TypeORMClient } from "../../repository/typeORM/service/typeORMClient";
 import { Appfactory } from "./app/utils/factories/appFactory";
 import { ExpressEntryPoint } from "./entrypoint";
 
-const app = Appfactory();
-const typeORMClientInitializer = new TypeORMClient(pinoLogger).initialize();
+const typeORMClient = new TypeORMClient(pinoLogger).initialize();
+const app = Appfactory(pinoLogger, typeORMClient);
 
-const expressEntryPoint = new ExpressEntryPoint(
-	app,
-	pinoLogger,
-	typeORMClientInitializer,
-);
+const expressEntryPoint = new ExpressEntryPoint(app, pinoLogger, typeORMClient);
 
 expressEntryPoint.listen();
