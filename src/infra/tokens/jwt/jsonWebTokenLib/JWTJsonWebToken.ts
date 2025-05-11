@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import type { JWTTokens } from "../../../../application/tokens/jwt/JWTTokens";
 import { JWTTokensError } from "../../../../application/tokens/jwt/errors/JWTTokensError";
 
-export type UserToken = {
+export type StudentToken = {
 	userId: string;
 };
 
@@ -26,21 +26,21 @@ export class JWTJsonWebToken implements JWTTokens {
 		}
 	}
 
-	decodeToken(token: string): UserToken {
+	decodeToken(token: string): StudentToken {
 		const decodedToken = jwt.decode(token);
 
-		if (this.#isUserToken(decodedToken)) {
+		if (this.#isStudentToken(decodedToken)) {
 			return decodedToken;
 		}
 
 		throw new JWTTokensError("Invalid Token. Cannot be decoded");
 	}
 
-	#isUserToken(decodedToken: unknown): decodedToken is UserToken {
+	#isStudentToken(decodedToken: unknown): decodedToken is StudentToken {
 		if (
 			typeof decodedToken === "object" &&
 			decodedToken !== null &&
-			typeof (decodedToken as UserToken).userId === "string"
+			typeof (decodedToken as StudentToken).userId === "string"
 		) {
 			return true;
 		}

@@ -2,6 +2,7 @@ import { ServerError } from "../../application/errors/server/serverError";
 import type { logger } from "../../application/logger/logger";
 import type { StudentRepository } from "../../application/repository/student/studentRepository";
 import type { MessageResponse } from "../../application/responses/general/message/messageResponse";
+import type { partialStudent } from "../../application/students/students";
 import { StudentEntity } from "../../domain/entities/Student/studentEntity";
 import type { StudentEmail } from "../../domain/value objects/student/studentEmail/studentEmail";
 import type { StudentFirstName } from "../../domain/value objects/student/studentFirstName/studentFirstName";
@@ -60,5 +61,29 @@ export class StudentRepositoryTypeORM implements StudentRepository {
 
 			return { message: "Invalid credentials. Consider using another e-mail" };
 		}
+	}
+
+	async getStudent(studentId: StudentId): Promise<StudentEntity | null> {
+		const typeORMClient = await this.client;
+		const student = await typeORMClient.manager.findOne(Student, {
+			where: { id: studentId.value },
+		});
+
+		if (!student) {
+			this.logger.debug(`Student with id ${studentId} not found`);
+			return null;
+		}
+
+		return new StudentEntity({
+			id: student.id,
+			firstName: student.firstName,
+			lastName: student.lastName,
+			email: student.email,
+			password: student.password,
+		});
+	}
+
+	async editStudent(userEdition: partialStudent): Promise<StudentId> {
+		return new StudentId("andkasdas");
 	}
 }

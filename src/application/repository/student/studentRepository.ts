@@ -5,6 +5,7 @@ import type { StudentId } from "../../../domain/value objects/student/studentId/
 import type { StudentLastName } from "../../../domain/value objects/student/studentLastName/studentLastName";
 import type { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
 import type { MessageResponse } from "../../responses/general/message/messageResponse";
+import type { partialStudent } from "../../students/students";
 
 export interface StudentRepository {
 	login(email: StudentEmail): Promise<StudentEntity | MessageResponse>;
@@ -14,4 +15,6 @@ export interface StudentRepository {
 		email: StudentEmail,
 		password: StudentPassword,
 	): Promise<StudentId | MessageResponse>;
+	getStudent(studentId: StudentId): Promise<StudentEntity | null>;
+	editStudent(userEdition: partialStudent): Promise<StudentId>;
 }

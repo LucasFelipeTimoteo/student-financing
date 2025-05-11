@@ -63,26 +63,4 @@ export class AuthRouteHandler {
 			next(error);
 		}
 	}
-
-	// async accesstokenRefresh(
-	// 	this: usersRouteHandlerExpress,
-	// 	req: AccessTokenRefreshExpressRequest,
-	// 	res: Response,
-	// 	next: NextFunction,
-	// ) {
-	// 	try {
-	// 		const { expiredToken, refreshToken } = req.body;
-	// 		const accessTokenRefreshResponseData =
-	// 			await this.UsersController.accessTokenRefresh(
-	// 				expiredToken,
-	// 				refreshToken,
-	// 			);
-
-	// 		return res
-	// 			.status(accessTokenRefreshResponseData.status)
-	// 			.json(accessTokenRefreshResponseData.body);
-	// 	} catch (error) {
-	// 		next(error);
-	// 	}
-	// }
 }

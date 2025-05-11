@@ -52,7 +52,8 @@ export class ExpressErrorHandlerMiddleware {
 				if (err instanceof ApiValidationError) {
 					this.logger.error(err);
 					res.status(err.statusCode || 500).json({
-						message: "API Validation error. Cannot process the request",
+						message:
+							err.message || "API Validation error. Cannot process the request",
 					});
 
 					if (!err.operational) return process.exit(1);

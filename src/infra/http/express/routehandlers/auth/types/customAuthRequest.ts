@@ -1,10 +1,3 @@
-export interface AccessTokenRefreshExpressRequest {
-	body: {
-		expiredToken: string;
-		refreshToken: string;
-	};
-}
-
 export interface LoginExpressRequest {
 	body: {
 		email: string;

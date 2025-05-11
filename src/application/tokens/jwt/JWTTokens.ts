@@ -1,4 +1,4 @@
-import type { UserToken } from "../../../infra/tokens/jwt/jsonWebTokenLib/JWTJsonWebToken";
+import type { StudentToken } from "../../../infra/tokens/jwt/jsonWebTokenLib/JWTJsonWebToken";
 
 export interface JWTTokens {
 	genToken(
@@ -7,5 +7,5 @@ export interface JWTTokens {
 		ttl?: number,
 	): string;
 	verifyToken(token: string, secret: string): string | object;
-	decodeToken(token: string): UserToken;
+	decodeToken(token: string): StudentToken;
 }
