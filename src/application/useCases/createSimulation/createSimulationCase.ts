@@ -1,3 +1,7 @@
+import { SimulationInstallmentsQuantity } from "../../../domain/entities/Simulation/value objects/simulationInstallmentsQuantity/simulationInstallmentsQuantity";
+import { SimulationInterestPerMonth } from "../../../domain/entities/Simulation/value objects/simulationInterestPerMonth/simulationInterestPerMonth";
+import { SimulationMonthlyInstallmentValue } from "../../../domain/entities/Simulation/value objects/simulationMonthlyInstallmentValue/simulationMonthlyInstallmentValue";
+import { SimulationTotalValue } from "../../../domain/entities/Simulation/value objects/simulationTotalValue/simulationTotalValue";
 import { StudentId } from "../../../domain/value objects/student/studentId/studentId";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 import type { SimulationsRepository } from "../../repository/simulations/simulationsRepository";
@@ -24,14 +28,21 @@ export class CreateSimulationCase {
 		}
 
 		const studentId = new StudentId(tokenData.userId);
-		const simulations = await this.simulationsRepository.createSimulation({
-			id: "teste-id-created",
+		const monthlyInstallment = new SimulationMonthlyInstallmentValue(
+			new SimulationTotalValue(totalValue),
+			new SimulationInterestPerMonth(interestPerMonth),
+			new SimulationInstallmentsQuantity(installmentsQuantity),
+		);
+
+		const simulation = await this.simulationsRepository.createSimulation({
 			studentId: studentId.value,
 			totalValue,
 			installmentsQuantity,
 			interestPerMonth,
+			monthlyInstallmentValue: monthlyInstallment.value,
 		});
-		return simulations;
+
+		return simulation;
 	}
 
 	#tokenPayloadTypeGuard(payload: unknown): payload is StudentToken {

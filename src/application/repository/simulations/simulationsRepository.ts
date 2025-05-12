@@ -5,6 +5,6 @@ import type { RawSimulation } from "../../simulations/simulation";
 export interface SimulationsRepository {
 	getSimulations(studentId: StudentId): Promise<SimulationEntity>;
 	createSimulation(
-		simulationValues: Omit<RawSimulation, "monthlyInstallmentValue">,
+		simulationValues: Omit<RawSimulation, "id">,
 	): Promise<SimulationEntity>;
 }

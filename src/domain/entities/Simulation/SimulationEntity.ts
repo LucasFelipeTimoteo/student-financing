@@ -11,7 +11,7 @@ export class SimulationEntity {
 	public readonly totalValue: SimulationTotalValue;
 	public readonly installmentsQuantity: SimulationInstallmentsQuantity;
 	public readonly interestPerMonth: SimulationInterestPerMonth;
-	public readonly monthlyInstallmentValue?: SimulationMonthlyInstallmentValue;
+	public readonly monthlyInstallmentValue: SimulationMonthlyInstallmentValue;
 
 	constructor(simulation: {
 		id: string;
@@ -30,10 +30,10 @@ export class SimulationEntity {
 		this.interestPerMonth = new SimulationInterestPerMonth(
 			simulation.interestPerMonth,
 		);
-		if (simulation.monthlyInstallmentValue) {
-			this.monthlyInstallmentValue = new SimulationMonthlyInstallmentValue(
-				simulation.monthlyInstallmentValue,
-			);
-		}
+		this.monthlyInstallmentValue = new SimulationMonthlyInstallmentValue(
+			this.totalValue,
+			this.interestPerMonth,
+			this.installmentsQuantity,
+		);
 	}
 }
