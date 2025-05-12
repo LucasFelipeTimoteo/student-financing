@@ -16,5 +16,8 @@ export interface StudentRepository {
 		password: StudentPassword,
 	): Promise<StudentId | MessageResponse>;
 	getStudent(studentId: StudentId): Promise<StudentEntity | null>;
-	editStudent(userEdition: partialStudent): Promise<StudentId>;
+	editStudent(
+		partialStudent: partialStudent,
+		studentId: StudentId,
+	): Promise<StudentId | null>;
 }

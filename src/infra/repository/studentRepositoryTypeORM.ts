@@ -2,7 +2,10 @@ import { ServerError } from "../../application/errors/server/serverError";
 import type { logger } from "../../application/logger/logger";
 import type { StudentRepository } from "../../application/repository/student/studentRepository";
 import type { MessageResponse } from "../../application/responses/general/message/messageResponse";
-import type { partialStudent } from "../../application/students/students";
+import type {
+	RawStudent,
+	partialStudent,
+} from "../../application/students/students";
 import { StudentEntity } from "../../domain/entities/Student/studentEntity";
 import type { StudentEmail } from "../../domain/value objects/student/studentEmail/studentEmail";
 import type { StudentFirstName } from "../../domain/value objects/student/studentFirstName/studentFirstName";
@@ -83,7 +86,43 @@ export class StudentRepositoryTypeORM implements StudentRepository {
 		});
 	}
 
-	async editStudent(userEdition: partialStudent): Promise<StudentId> {
-		return new StudentId("andkasdas");
+	async editStudent(
+		partialStudent: partialStudent,
+		studentId: StudentId,
+	): Promise<StudentId | null> {
+		const updateData: Partial<Omit<RawStudent, "id">> = {};
+
+		if (partialStudent.firstName !== undefined)
+			updateData.firstName = partialStudent.firstName.value;
+		if (partialStudent.lastName !== undefined)
+			updateData.lastName = partialStudent.lastName.value;
+		if (partialStudent.email !== undefined)
+			updateData.email = partialStudent.email.value;
+		if (partialStudent.password !== undefined)
+			updateData.password = partialStudent.password.value;
+
+		if (Object.keys(updateData).length === 0) {
+			this.logger.debug(
+				"'updateData' has no properties, so editStudents will not execte any query",
+			);
+			return null;
+		}
+
+		const typeORMClient = await this.client;
+
+		const student = await typeORMClient.manager.update(
+			Student,
+			{ id: studentId.value },
+			updateData,
+		);
+
+		if (student.affected === 0) {
+			this.logger.debug("'updateData' query cannot update any field");
+			return null;
+		}
+
+		this.logger.debug("successfuly updated user");
+
+		return studentId;
 	}
 }

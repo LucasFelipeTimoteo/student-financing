@@ -1,10 +1,9 @@
 import type { StudentEntity } from "../../../domain/entities/Student/studentEntity";
 import { StudentId } from "../../../domain/value objects/student/studentId/studentId";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
-import type { StudentToken } from "../../../infra/tokens/jwt/jsonWebTokenLib/JWTJsonWebToken";
 import { ApiValidationError } from "../../errors/apiValidation/apiValidationError";
 import type { StudentRepository } from "../../repository/student/studentRepository";
-import type { JWTTokens } from "../../tokens/jwt/JWTTokens";
+import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
 
 export class GetStudentCase {
 	constructor(

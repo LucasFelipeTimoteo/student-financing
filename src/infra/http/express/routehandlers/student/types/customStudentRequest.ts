@@ -9,5 +9,6 @@ export interface getStudentExpressRequest {
 export interface editStudentExpressRequest {
 	body: {
 		newData: partialStudent;
+		accessToken: string;
 	};
 }

@@ -1,9 +1,7 @@
-import type { StudentPassword } from "../../../../domain/value objects/student/studentPassword/studentPassword";
-
 export interface PasswordHasher {
 	genSalt(rounds: number): Promise<string>;
 	genSaltSync(rounds: number): string;
-	hashAsync(text: StudentPassword, salt: string): Promise<string>;
-	hashSync(text: StudentPassword, salt: string): string;
-	compare(text: StudentPassword, hash: string): Promise<boolean>;
+	hashAsync(text: string, salt: string): Promise<string>;
+	hashSync(text: string, salt: string): string;
+	compare(text: string, hash: string): Promise<boolean>;
 }

@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 import type { PasswordHasher } from "../../../../../application/parsers/password/hasing/passwordHasher";
-import type { StudentPassword } from "../../../../../domain/value objects/student/studentPassword/studentPassword";
 
 export class HashPasswordBcrypt implements PasswordHasher {
 	async genSalt(rounds: number): Promise<string> {
@@ -13,18 +12,18 @@ export class HashPasswordBcrypt implements PasswordHasher {
 		return salt;
 	}
 
-	async hashAsync(text: StudentPassword, salt: string): Promise<string> {
-		const hash = await bcrypt.hash(text.value, salt);
+	async hashAsync(text: string, salt: string): Promise<string> {
+		const hash = await bcrypt.hash(text, salt);
 		return hash;
 	}
 
-	hashSync(text: StudentPassword, salt: string): string {
-		const hash = bcrypt.hashSync(text.value, salt);
+	hashSync(text: string, salt: string): string {
+		const hash = bcrypt.hashSync(text, salt);
 		return hash;
 	}
 
-	async compare(text: StudentPassword, hash: string): Promise<boolean> {
-		const isEqual = await bcrypt.compare(text.value, hash);
+	async compare(text: string, hash: string): Promise<boolean> {
+		const isEqual = await bcrypt.compare(text, hash);
 		return isEqual;
 	}
 }

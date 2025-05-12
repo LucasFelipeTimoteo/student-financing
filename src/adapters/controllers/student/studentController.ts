@@ -1,6 +1,6 @@
 import type { logger } from "../../../application/logger/logger";
+import type { PasswordHasher } from "../../../application/parsers/password/hasing/passwordHasher";
 import type { StudentRepository } from "../../../application/repository/student/studentRepository";
-import type { MessageResponse } from "../../../application/responses/general/message/messageResponse";
 import type {
 	RawStudent,
 	partialStudent,
@@ -20,6 +20,7 @@ export class StudentController {
 		private logger: logger,
 		private jwt: JWTTokens,
 		private studentRepository: StudentRepository,
+		private passwordHasher: PasswordHasher,
 	) {}
 
 	async getStudent(
@@ -43,14 +44,18 @@ export class StudentController {
 
 	async editStudent(
 		partialStudent: partialStudent,
-	): Promise<HttpResponse<StudentId | MessageResponse>> {
-		const registerCase = new EditStudentCase(
+		accessToken: string,
+	): Promise<HttpResponse<StudentId | null>> {
+		const editUserCase = new EditStudentCase(
 			partialStudent,
+			accessToken,
 			this.logger,
 			this.studentRepository,
+			this.jwt,
+			this.passwordHasher,
 		);
-		const registerResult = await registerCase.edit();
+		const editUserResult = await editUserCase.edit();
 
-		return httpResponsePresenter.ok(registerResult);
+		return httpResponsePresenter.ok(editUserResult);
 	}
 }

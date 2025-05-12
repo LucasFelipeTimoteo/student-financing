@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
-import type { JWTTokens } from "../../../../application/tokens/jwt/JWTTokens";
+import type {
+	JWTTokens,
+	StudentToken,
+} from "../../../../application/tokens/jwt/JWTTokens";
 import { JWTTokensError } from "../../../../application/tokens/jwt/errors/JWTTokensError";
-
-export type StudentToken = {
-	userId: string;
-};
 
 export class JWTJsonWebToken implements JWTTokens {
 	genToken(

@@ -45,7 +45,10 @@ export class StudentRouteHandler {
 				);
 			}
 
-			const { firstName, lastName, email, password } = req.body.newData;
+			const {
+				accessToken,
+				newData: { firstName, lastName, email, password },
+			} = req.body;
 
 			const validatedUserEdition: partialStudent = {
 				...(typeof firstName === "string" && {
@@ -65,8 +68,10 @@ export class StudentRouteHandler {
 				}),
 			};
 
-			const editStudentResponse =
-				await this.studentController.editStudent(validatedUserEdition);
+			const editStudentResponse = await this.studentController.editStudent(
+				validatedUserEdition,
+				accessToken,
+			);
 
 			return res
 				.status(editStudentResponse.status)

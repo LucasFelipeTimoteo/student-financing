@@ -25,7 +25,12 @@ export const Appfactory = (
 	),
 	authRouteHandler = new AuthRouteHandler(authController),
 	authRouter = new AuthRouter(authRouteHandler),
-	studentController = new StudentController(logger, jwt, studentRepository),
+	studentController = new StudentController(
+		logger,
+		jwt,
+		studentRepository,
+		passwordHasher,
+	),
 	studentRouteHandler = new StudentRouteHandler(studentController),
 	studentRouter = new StudentRouter(studentRouteHandler),
 ) => {

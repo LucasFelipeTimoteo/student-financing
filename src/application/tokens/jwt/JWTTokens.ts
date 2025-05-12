@@ -1,4 +1,6 @@
-import type { StudentToken } from "../../../infra/tokens/jwt/jsonWebTokenLib/JWTJsonWebToken";
+export type StudentToken = {
+	userId: string;
+};
 
 export interface JWTTokens {
 	genToken(

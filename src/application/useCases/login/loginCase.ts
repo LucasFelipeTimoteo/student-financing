@@ -27,7 +27,7 @@ export class LoginCase {
 		}
 
 		const isPasswordCorrect = await this.passwordHasher.compare(
-			this.password,
+			this.password.value,
 			loginResult.password.value,
 		);
 
