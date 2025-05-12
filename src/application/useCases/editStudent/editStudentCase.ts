@@ -35,6 +35,7 @@ export class EditStudentCase {
 				this.partialStudent.password.value,
 				salt,
 			);
+			this.logger.debug("Successfully hashed new password");
 			parsedPartialStudent.password = new StudentPassword(hashedPassword);
 		}
 		const editedUser = await this.studentRepository.editStudent(
