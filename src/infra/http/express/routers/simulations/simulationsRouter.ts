@@ -14,6 +14,10 @@ export class SimulationsRouter {
 			`${this.baseRoutePath}/simulations`,
 			this.simulationsRouteHandler.getSimulations,
 		);
+		router.post(
+			`${this.baseRoutePath}/simulations`,
+			this.simulationsRouteHandler.createSimulation,
+		);
 
 		return router;
 	}

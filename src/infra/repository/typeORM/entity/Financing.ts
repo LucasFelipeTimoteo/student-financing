@@ -18,29 +18,29 @@ export class Financing {
 	student_id!: Student;
 
 	@Column("decimal", { precision: 15, scale: 2 })
-	total_value!: number;
+	totalValue!: number;
 
 	@Column()
-	installments_quantity!: number;
+	installmentsQuantity!: number;
 
 	@Column("decimal", { precision: 5, scale: 2 })
-	interest_per_month!: number;
+	interestPerMonth!: number;
 
 	@Column("decimal", { precision: 15, scale: 2, nullable: true })
-	monthly_installment_value!: number;
+	monthlyInstallmentValue!: number;
 
 	@AfterLoad()
 	calculateMonthlyInstallment() {
-		const monthlyInterestRate = this.interest_per_month / 100;
-		const totalAmount = this.total_value;
-		const numberOfInstallments = this.installments_quantity;
+		const monthlyInterestRate = this.interestPerMonth / 100;
+		const totalAmount = this.totalValue;
+		const numberOfInstallments = this.installmentsQuantity;
 
 		if (monthlyInterestRate > 0) {
-			this.monthly_installment_value =
+			this.monthlyInstallmentValue =
 				(totalAmount * monthlyInterestRate) /
 				(1 - (1 + monthlyInterestRate) ** -numberOfInstallments);
 		} else {
-			this.monthly_installment_value = totalAmount / numberOfInstallments;
+			this.monthlyInstallmentValue = totalAmount / numberOfInstallments;
 		}
 	}
 }

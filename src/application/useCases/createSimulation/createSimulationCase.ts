@@ -3,13 +3,18 @@ import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 import type { SimulationsRepository } from "../../repository/simulations/simulationsRepository";
 import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
 
-export class GetSimulationsCase {
+export class CreateSimulationCase {
 	constructor(
 		private jwtTokens: JWTTokens,
 		private simulationsRepository: SimulationsRepository,
 	) {}
 
-	async getSimulations(accessToken: string) {
+	async createSimulation(
+		accessToken: string,
+		installmentsQuantity: number,
+		interestPerMonth: number,
+		totalValue: number,
+	) {
 		const tokenData = this.jwtTokens.verifyToken(
 			accessToken,
 			appEnv.accessTokenJwtSecret,
@@ -19,8 +24,13 @@ export class GetSimulationsCase {
 		}
 
 		const studentId = new StudentId(tokenData.userId);
-		const simulations =
-			await this.simulationsRepository.getSimulations(studentId);
+		const simulations = await this.simulationsRepository.createSimulation({
+			id: "teste-id-created",
+			studentId: studentId.value,
+			totalValue,
+			installmentsQuantity,
+			interestPerMonth,
+		});
 		return simulations;
 	}
 
