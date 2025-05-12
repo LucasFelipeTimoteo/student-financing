@@ -1,3 +1,4 @@
+import { SimulationError } from "../../errors/simulation";
 import type { SimulationInstallmentsQuantity } from "../simulationInstallmentsQuantity/simulationInstallmentsQuantity";
 import type { SimulationInterestPerMonth } from "../simulationInterestPerMonth/simulationInterestPerMonth";
 import type { SimulationTotalValue } from "../simulationTotalValue/simulationTotalValue";
@@ -11,6 +12,24 @@ export class SimulationMonthlyInstallmentValue {
 		private installmentsQuantity: SimulationInstallmentsQuantity,
 	) {
 		this.value = this.#calculateMonthlyInstallment();
+
+		if (!this.value) {
+			throw new SimulationError(
+				`monthly installments is required, but received: ${this.value}`,
+			);
+		}
+
+		if (typeof this.value !== "number") {
+			throw new SimulationError(
+				`monthly installments must be a number, but received: ${typeof this.value} of value ${this.value}`,
+			);
+		}
+
+		if (this.value === 0) {
+			throw new SimulationError(
+				`monthly installments must be greater than 0, but received: ${this.value}`,
+			);
+		}
 	}
 
 	#calculateMonthlyInstallment(): number {

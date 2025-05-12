@@ -3,6 +3,7 @@ import type { SimulationsRepository } from "../../../application/repository/simu
 import type { JWTTokens } from "../../../application/tokens/jwt/JWTTokens";
 import { CreateSimulationCase } from "../../../application/useCases/createSimulation/createSimulationCase";
 import { GetSimulationsCase } from "../../../application/useCases/getSimulations/getSimulationsCase";
+import { SimulationError } from "../../../domain/entities/Simulation/errors/simulation";
 
 import { httpResponsePresenter } from "../../presenters/http/response/httpResponsePresenter";
 
@@ -34,21 +35,29 @@ export class SimulationsController {
 		interestPerMonth: number,
 		totalValue: number,
 	) {
-		const createSimulationCase = new CreateSimulationCase(
-			this.jwt,
-			this.SimulationsRepository,
-		);
-		const getSimulationsResult = await createSimulationCase.createSimulation(
-			accessToken,
-			installmentsQuantity,
-			interestPerMonth,
-			totalValue,
-		);
+		try {
+			const createSimulationCase = new CreateSimulationCase(
+				this.jwt,
+				this.SimulationsRepository,
+			);
+			const getSimulationsResult = await createSimulationCase.createSimulation(
+				accessToken,
+				installmentsQuantity,
+				interestPerMonth,
+				totalValue,
+			);
 
-		// if ("message" in getSimulationsResult) {
-		//   return httpResponsePresenter.badRequest(getSimulationsResult);
-		// }
+			// if ("message" in getSimulationsResult) {
+			//   return httpResponsePresenter.badRequest(getSimulationsResult);
+			// }
 
-		return httpResponsePresenter.ok(getSimulationsResult);
+			return httpResponsePresenter.created(getSimulationsResult);
+		} catch (error) {
+			if (error instanceof SimulationError) {
+				return httpResponsePresenter.badRequest({ message: error.message });
+			}
+
+			throw error;
+		}
 	}
 }
