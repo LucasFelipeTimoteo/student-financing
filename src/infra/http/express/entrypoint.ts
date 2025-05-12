@@ -22,7 +22,7 @@ export class ExpressEntryPoint {
 
 	async listen() {
 		const { "0": db } = await this.#startDatabases(this.mainDatabase);
-		const app = this.#configApp();
+		const app = this.configApp();
 		const server = app.listen(this.port, () =>
 			this.logger.info(this.listenMessage),
 		);
@@ -31,7 +31,7 @@ export class ExpressEntryPoint {
 		await this.gracefullShutdown(db, server);
 	}
 
-	#configApp() {
+	configApp() {
 		return this.app.exec();
 	}
 

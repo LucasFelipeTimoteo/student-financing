@@ -85,7 +85,7 @@ export class AuthController {
 				return httpResponsePresenter.badRequest(registerResult);
 			}
 
-			return httpResponsePresenter.ok(registerResult);
+			return httpResponsePresenter.created(registerResult);
 		} catch (error) {
 			if (error instanceof StudentError) {
 				return httpResponsePresenter.badRequest({ message: error.message });
