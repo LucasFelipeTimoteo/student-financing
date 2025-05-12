@@ -1,4 +1,4 @@
-import type { partialStudent } from "../../../../../../application/students/students";
+import type { RawStudent } from "../../../../../../application/students/students";
 
 export interface getStudentExpressRequest {
 	body: {
@@ -8,7 +8,7 @@ export interface getStudentExpressRequest {
 
 export interface editStudentExpressRequest {
 	body: {
-		newData: partialStudent;
+		newData: Omit<RawStudent, "id">;
 		accessToken: string;
 	};
 }

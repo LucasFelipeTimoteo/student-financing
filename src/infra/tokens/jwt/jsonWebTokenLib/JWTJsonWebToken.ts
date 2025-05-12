@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import type {
 	JWTTokens,
+	JwtErrorResponse,
 	StudentToken,
 } from "../../../../application/tokens/jwt/JWTTokens";
-import { JWTTokensError } from "../../../../application/tokens/jwt/errors/JWTTokensError";
 
 export class JWTJsonWebToken implements JWTTokens {
 	genToken(
@@ -21,18 +21,18 @@ export class JWTJsonWebToken implements JWTTokens {
 			const isTokenCorrect = jwt.verify(token, secret);
 			return isTokenCorrect;
 		} catch (error) {
-			throw new JWTTokensError("Fail to verify token. Invalid token");
+			return { error: "Fail to verify token. Invalid token" };
 		}
 	}
 
-	decodeToken(token: string): StudentToken {
+	decodeToken(token: string): StudentToken | JwtErrorResponse {
 		const decodedToken = jwt.decode(token);
 
 		if (this.#isStudentToken(decodedToken)) {
 			return decodedToken;
 		}
 
-		throw new JWTTokensError("Invalid Token. Cannot be decoded");
+		return { error: "Invalid Token. Cannot be decoded" };
 	}
 
 	#isStudentToken(decodedToken: unknown): decodedToken is StudentToken {

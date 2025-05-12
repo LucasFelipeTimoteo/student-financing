@@ -1,11 +1,5 @@
 import type { NextFunction, Response } from "express";
 import type { StudentController } from "../../../../../adapters/controllers/student/studentController";
-import { ApiValidationError } from "../../../../../application/errors/apiValidation/apiValidationError";
-import type { partialStudent } from "../../../../../application/students/students";
-import { StudentEmail } from "../../../../../domain/value objects/student/studentEmail/studentEmail";
-import { StudentFirstName } from "../../../../../domain/value objects/student/studentFirstName/studentFirstName";
-import { StudentLastName } from "../../../../../domain/value objects/student/studentLastName/studentLastName";
-import { StudentPassword } from "../../../../../domain/value objects/student/studentPassword/studentPassword";
 import type {
 	editStudentExpressRequest,
 	getStudentExpressRequest,
@@ -38,41 +32,12 @@ export class StudentRouteHandler {
 		next: NextFunction,
 	) {
 		try {
-			if (!("newData" in req.body) || typeof req.body.newData !== "object") {
-				throw new ApiValidationError(
-					"Student data shold be inside a 'newData' object",
-					400,
-				);
-			}
-
-			const {
-				accessToken,
-				newData: { firstName, lastName, email, password },
-			} = req.body;
-
-			const validatedUserEdition: partialStudent = {
-				...(typeof firstName === "string" && {
-					firstName: new StudentFirstName(firstName),
-				}),
-
-				...(typeof lastName === "string" && {
-					lastName: new StudentLastName(lastName),
-				}),
-
-				...(typeof email === "string" && {
-					email: new StudentEmail(email),
-				}),
-
-				...(typeof password === "string" && {
-					password: new StudentPassword(password),
-				}),
-			};
+			const { accessToken, newData } = req.body;
 
 			const editStudentResponse = await this.studentController.editStudent(
-				validatedUserEdition,
+				newData,
 				accessToken,
 			);
-
 			return res
 				.status(editStudentResponse.status)
 				.json(editStudentResponse.body);

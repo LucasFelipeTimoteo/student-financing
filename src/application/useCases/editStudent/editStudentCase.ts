@@ -2,7 +2,6 @@ import type { StudentEntity } from "../../../domain/entities/Student/studentEnti
 import { StudentId } from "../../../domain/value objects/student/studentId/studentId";
 import { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
-import { ApiValidationError } from "../../errors/apiValidation/apiValidationError";
 import type { logger } from "../../logger/logger";
 import type { PasswordHasher } from "../../parsers/password/hasing/passwordHasher";
 import type { StudentRepository } from "../../repository/student/studentRepository";
@@ -24,7 +23,7 @@ export class EditStudentCase {
 			appEnv.accessTokenJwtSecret,
 		);
 		if (!this.#tokenPayloadTypeGuard(tokenData)) {
-			throw new ApiValidationError("Invalid token");
+			return { message: "Invalid token" };
 		}
 
 		const studentId = new StudentId(tokenData.userId);
@@ -38,12 +37,12 @@ export class EditStudentCase {
 			this.logger.debug("Successfully hashed new password");
 			parsedPartialStudent.password = new StudentPassword(hashedPassword);
 		}
-		const editedUser = await this.studentRepository.editStudent(
+		const editedStudent = await this.studentRepository.editStudent(
 			parsedPartialStudent,
 			studentId,
 		);
 
-		return editedUser;
+		return editedStudent;
 	}
 
 	#tokenPayloadTypeGuard(payload: unknown): payload is StudentToken {

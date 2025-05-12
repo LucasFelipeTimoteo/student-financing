@@ -1,8 +1,8 @@
 import type { StudentEntity } from "../../../domain/entities/Student/studentEntity";
 import { StudentId } from "../../../domain/value objects/student/studentId/studentId";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
-import { ApiValidationError } from "../../errors/apiValidation/apiValidationError";
 import type { StudentRepository } from "../../repository/student/studentRepository";
+import type { MessageResponse } from "../../responses/general/message/messageResponse";
 import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
 
 export class GetStudentCase {
@@ -12,20 +12,20 @@ export class GetStudentCase {
 		private studentRepository: StudentRepository,
 	) {}
 
-	async get(): Promise<Omit<StudentEntity, "password">> {
+	async get(): Promise<Omit<StudentEntity, "password"> | MessageResponse> {
 		const tokenData = this.jwtTokens.verifyToken(
 			this.accessToken,
 			appEnv.accessTokenJwtSecret,
 		);
 		if (!this.#tokenPayloadTypeGuard(tokenData)) {
-			throw new ApiValidationError("Invalid token");
+			return { message: "Invalid token" };
 		}
 
 		const studentId = new StudentId(tokenData.userId);
 		const student = await this.studentRepository.getStudent(studentId);
 
 		if (!student) {
-			throw new ApiValidationError("Invalid token");
+			return { message: "Invalid token" };
 		}
 
 		const safeStudent: Omit<StudentEntity, "password"> = {

@@ -89,40 +89,49 @@ export class StudentRepositoryTypeORM implements StudentRepository {
 	async editStudent(
 		partialStudent: partialStudent,
 		studentId: StudentId,
-	): Promise<StudentId | null> {
-		const updateData: Partial<Omit<RawStudent, "id">> = {};
+	): Promise<StudentId | null | MessageResponse> {
+		try {
+			const updateData: Partial<Omit<RawStudent, "id">> = {};
 
-		if (partialStudent.firstName !== undefined)
-			updateData.firstName = partialStudent.firstName.value;
-		if (partialStudent.lastName !== undefined)
-			updateData.lastName = partialStudent.lastName.value;
-		if (partialStudent.email !== undefined)
-			updateData.email = partialStudent.email.value;
-		if (partialStudent.password !== undefined)
-			updateData.password = partialStudent.password.value;
+			if (partialStudent.firstName !== undefined)
+				updateData.firstName = partialStudent.firstName.value;
+			if (partialStudent.lastName !== undefined)
+				updateData.lastName = partialStudent.lastName.value;
+			if (partialStudent.email !== undefined)
+				updateData.email = partialStudent.email.value;
+			if (partialStudent.password !== undefined)
+				updateData.password = partialStudent.password.value;
 
-		if (Object.keys(updateData).length === 0) {
-			this.logger.debug(
-				"'updateData' has no properties, so editStudents will not execte any query",
+			if (Object.keys(updateData).length === 0) {
+				this.logger.debug(
+					"'updateData' has no properties, so editStudents will not execte any query",
+				);
+				return null;
+			}
+
+			const typeORMClient = await this.client;
+
+			const student = await typeORMClient.manager.update(
+				Student,
+				{ id: studentId.value },
+				updateData,
 			);
-			return null;
+
+			if (student.affected === 0) {
+				this.logger.debug("'updateData' query cannot update any field");
+				return null;
+			}
+
+			this.logger.debug("successfuly updated user");
+
+			return studentId;
+		} catch (error) {
+			// this.logger.debug(error);
+			if (!(error instanceof Error)) {
+				throw new ServerError("Unknown server error");
+			}
+
+			return { message: "Invalid credentials. Consider using another e-mail" };
 		}
-
-		const typeORMClient = await this.client;
-
-		const student = await typeORMClient.manager.update(
-			Student,
-			{ id: studentId.value },
-			updateData,
-		);
-
-		if (student.affected === 0) {
-			this.logger.debug("'updateData' query cannot update any field");
-			return null;
-		}
-
-		this.logger.debug("successfuly updated user");
-
-		return studentId;
 	}
 }

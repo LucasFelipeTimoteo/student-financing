@@ -6,10 +6,11 @@ import type { TokensResponse } from "../../../application/responses/general/toke
 import type { JWTTokens } from "../../../application/tokens/jwt/JWTTokens";
 import { LoginCase } from "../../../application/useCases/login/loginCase";
 import { RegisterCase } from "../../../application/useCases/register/registerCase";
-import type { StudentEmail } from "../../../domain/value objects/student/studentEmail/studentEmail";
-import type { StudentFirstName } from "../../../domain/value objects/student/studentFirstName/studentFirstName";
-import type { StudentLastName } from "../../../domain/value objects/student/studentLastName/studentLastName";
-import type { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
+import { StudentError } from "../../../domain/entities/Student/errors/studentError";
+import { StudentEmail } from "../../../domain/value objects/student/studentEmail/studentEmail";
+import { StudentFirstName } from "../../../domain/value objects/student/studentFirstName/studentFirstName";
+import { StudentLastName } from "../../../domain/value objects/student/studentLastName/studentLastName";
+import { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
 
 import {
 	type HttpResponse,
@@ -25,44 +26,72 @@ export class AuthController {
 	) {}
 
 	async login(
-		email: StudentEmail,
-		password: StudentPassword,
+		email: string,
+		password: string,
 	): Promise<HttpResponse<TokensResponse | MessageResponse>> {
-		const loginCase = new LoginCase(
-			email,
-			password,
-			this.jwt,
-			this.logger,
-			this.studentRepository,
-			this.passwordHasher,
-		);
-		const loginResult = await loginCase.login();
+		try {
+			const validEmail = new StudentEmail(email);
+			const validPassword = new StudentPassword(password);
 
-		if ("message" in loginResult) {
-			return httpResponsePresenter.badRequest(loginResult);
+			const loginCase = new LoginCase(
+				validEmail,
+				validPassword,
+				this.jwt,
+				this.logger,
+				this.studentRepository,
+				this.passwordHasher,
+			);
+			const loginResult = await loginCase.login();
+
+			if ("message" in loginResult) {
+				return httpResponsePresenter.badRequest(loginResult);
+			}
+
+			return httpResponsePresenter.ok(loginResult);
+		} catch (error) {
+			if (error instanceof StudentError) {
+				return httpResponsePresenter.badRequest({ message: error.message });
+			}
+
+			throw error;
 		}
-
-		return httpResponsePresenter.ok(loginResult);
 	}
 
 	async register(
-		firstName: StudentFirstName,
-		lastName: StudentLastName,
-		email: StudentEmail,
-		password: StudentPassword,
+		firstName: string,
+		lastName: string,
+		email: string,
+		password: string,
 	): Promise<HttpResponse<TokensResponse | MessageResponse>> {
-		const registerCase = new RegisterCase(
-			firstName,
-			lastName,
-			email,
-			password,
-			this.jwt,
-			this.logger,
-			this.passwordHasher,
-			this.studentRepository,
-		);
-		const registerResult = await registerCase.register();
+		try {
+			const validFirstName = new StudentFirstName(firstName);
+			const validLastName = new StudentLastName(lastName);
+			const validEmail = new StudentEmail(email);
+			const validPassword = new StudentPassword(password);
 
-		return httpResponsePresenter.ok(registerResult);
+			const registerCase = new RegisterCase(
+				validFirstName,
+				validLastName,
+				validEmail,
+				validPassword,
+				this.jwt,
+				this.logger,
+				this.passwordHasher,
+				this.studentRepository,
+			);
+			const registerResult = await registerCase.register();
+
+			if ("message" in registerResult) {
+				return httpResponsePresenter.badRequest(registerResult);
+			}
+
+			return httpResponsePresenter.ok(registerResult);
+		} catch (error) {
+			if (error instanceof StudentError) {
+				return httpResponsePresenter.badRequest({ message: error.message });
+			}
+
+			throw error;
+		}
 	}
 }

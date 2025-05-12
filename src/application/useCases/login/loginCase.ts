@@ -1,7 +1,6 @@
 import type { StudentEmail } from "../../../domain/value objects/student/studentEmail/studentEmail";
 import type { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
-import { ApiError } from "../../errors/api/apiError";
 import type { logger } from "../../logger/logger";
 import type { PasswordHasher } from "../../parsers/password/hasing/passwordHasher";
 import type { StudentRepository } from "../../repository/student/studentRepository";
@@ -23,7 +22,7 @@ export class LoginCase {
 		const loginResult = await this.studentRepository.login(this.email);
 
 		if ("message" in loginResult) {
-			throw new ApiError(loginResult.message);
+			return loginResult;
 		}
 
 		const isPasswordCorrect = await this.passwordHasher.compare(

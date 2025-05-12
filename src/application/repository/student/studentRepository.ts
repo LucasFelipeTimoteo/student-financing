@@ -19,5 +19,5 @@ export interface StudentRepository {
 	editStudent(
 		partialStudent: partialStudent,
 		studentId: StudentId,
-	): Promise<StudentId | null>;
+	): Promise<StudentId | null | MessageResponse>;
 }

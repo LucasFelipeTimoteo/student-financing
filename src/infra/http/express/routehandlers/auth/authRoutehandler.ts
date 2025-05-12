@@ -1,9 +1,5 @@
 import type { NextFunction, Response } from "express";
 import type { AuthController } from "../../../../../adapters/controllers/auth/authController";
-import { StudentEmail } from "../../../../../domain/value objects/student/studentEmail/studentEmail";
-import { StudentFirstName } from "../../../../../domain/value objects/student/studentFirstName/studentFirstName";
-import { StudentLastName } from "../../../../../domain/value objects/student/studentLastName/studentLastName";
-import { StudentPassword } from "../../../../../domain/value objects/student/studentPassword/studentPassword";
 import type {
 	LoginExpressRequest,
 	RegisterExpressRequest,
@@ -21,12 +17,9 @@ export class AuthRouteHandler {
 		try {
 			const { email, password } = req.body;
 
-			const validEmail = new StudentEmail(email);
-			const validPassword = new StudentPassword(password);
-
 			const loginResponseData = await this.authController.login(
-				validEmail,
-				validPassword,
+				email,
+				password,
 			);
 
 			return res.status(loginResponseData.status).json(loginResponseData.body);
@@ -44,16 +37,11 @@ export class AuthRouteHandler {
 		try {
 			const { firstName, lastName, email, password } = req.body;
 
-			const validFirstName = new StudentFirstName(firstName);
-			const validLastName = new StudentLastName(lastName);
-			const validEmail = new StudentEmail(email);
-			const validPassword = new StudentPassword(password);
-
 			const registerResponseData = await this.authController.register(
-				validFirstName,
-				validLastName,
-				validEmail,
-				validPassword,
+				firstName,
+				lastName,
+				email,
+				password,
 			);
 
 			return res
