@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import type { logger } from "../../../../application/logger/logger";
 import { appEnv } from "../../../../global/utils/env/appEnv/appEnv";
+import { Financing } from "../entity/Financing";
 import { Student } from "../entity/Student";
 
 export class TypeORMClient {
@@ -14,7 +15,7 @@ export class TypeORMClient {
 		database: appEnv.databaseName,
 		synchronize: appEnv.nodeEnv !== "production",
 		logging: false,
-		entities: [Student],
+		entities: [Student, Financing],
 		migrations: [],
 		subscribers: [],
 	});
