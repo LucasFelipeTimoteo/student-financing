@@ -1,0 +1,37 @@
+services:
+  app:
+    container_name: student-finacing-simulation
+    image: student-financing-simulation:${NODE_ENV}
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: ${NODE_ENV}
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+    depends_on:
+      - postgres
+    # volumes:
+    #   - .:/app
+
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: postgres
+    environment:
+      - ALLOW_EMPTY_PASSWORD=${DATABASE_PASSWORD:+no}${DATABASE_PASSWORD:-yes}
+      - POSTGRESQL_USERNAME=${DATABASE_USER}
+      - POSTGRESQL_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRESQL_DATABASE=${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+volumes:
+  postgres_data:
