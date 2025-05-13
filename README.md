@@ -70,7 +70,8 @@ npm run test:e2e:watch
 ```
 
 ## Algumas explicações tecnicas
-ver no arquivo `technical-explanations.md`
+- geral: ver no arquivo `technical-explanations.md`
+- arquitetura do projeto: ver no arquivo `ARCHITECTURE_EXPLANATION.md`
 
 ## Pontos a melhorar
 - Sistema de error handling não é totalmente modular, depende do express
