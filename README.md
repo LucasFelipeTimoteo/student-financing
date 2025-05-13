@@ -74,6 +74,7 @@ ver no arquivo `technical-explanations.md`
 
 ## Pontos a melhorar
 - Sistema de error handling não é totalmente modular, depende do express
+- Documentação só cobre os casos de sucesso (faltou tempo)
 
 ## TODO (Coisas que não deu tempo de implementar ou resolver)
 - maior cobertura de testes unitários
@@ -81,3 +82,5 @@ ver no arquivo `technical-explanations.md`
 - terminar testes E2E
 
 - o studentId da tabela simulation não é uma foreign key, pois a ORM gera uma tipagem diferente em formato de objeto ao invés do tipo primitivo que espero receber, o que quebra a aplicação caso eu continue mantendo as regras de negócio da aplicação sem referência a tipagem de libs
+
+- Adicionar uma documentação OpenAPI (Swagger) com todas as rotas e possiveis respostas

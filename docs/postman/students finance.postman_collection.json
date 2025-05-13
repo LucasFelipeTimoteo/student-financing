@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "b8600a4f-43df-4eda-a9bc-87ff8462798d",
+		"name": "students finance",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36822624"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"email2@email.com\",\r\n    \"password\": \"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"JohnDoe7@email.com\",\r\n    \"password\": \"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserData",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTI5MTlkNC1iMjY5LTRiMDAtYTM0NC1mNjQ0MDgzN2Y2Y2UiLCJpYXQiOjE3NDcwOTY4NzUsImV4cCI6MTc0NzM5Njg3NX0.ZiFuitRv1sN5hHbZQXvpqKudfeB_6CbVWtuF1VcYWJ8\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editUserData",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newData\": {\r\n        \"firstName\": \"JON\",\r\n        \"lastName\": \"DOE\"\r\n    },\r\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTI5MTlkNC1iMjY5LTRiMDAtYTM0NC1mNjQ0MDgzN2Y2Y2UiLCJpYXQiOjE3NDcwOTY4NzUsImV4cCI6MTc0NzM5Njg3NX0.ZiFuitRv1sN5hHbZQXvpqKudfeB_6CbVWtuF1VcYWJ8\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSimulations",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTI5MTlkNC1iMjY5LTRiMDAtYTM0NC1mNjQ0MDgzN2Y2Y2UiLCJpYXQiOjE3NDcwOTY4NzUsImV4cCI6MTc0NzM5Njg3NX0.ZiFuitRv1sN5hHbZQXvpqKudfeB_6CbVWtuF1VcYWJ8\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/simulations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"simulations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createSimulations",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTI5MTlkNC1iMjY5LTRiMDAtYTM0NC1mNjQ0MDgzN2Y2Y2UiLCJpYXQiOjE3NDcwOTY4NzUsImV4cCI6MTc0NzM5Njg3NX0.ZiFuitRv1sN5hHbZQXvpqKudfeB_6CbVWtuF1VcYWJ8\",\r\n    \"totalValue\": 50000.00,\r\n    \"installmentsQuantity\": 24,\r\n    \"interestPerMonth\": 0.015\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/simulations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"simulations"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
