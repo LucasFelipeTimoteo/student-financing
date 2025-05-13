@@ -15,18 +15,26 @@ export class SimulationsController {
 	) {}
 
 	async getSimulations(accessToken: string) {
-		const getSimulationsCase = new GetSimulationsCase(
-			this.jwt,
-			this.SimulationsRepository,
-		);
-		const getSimulationsResult =
-			await getSimulationsCase.getSimulations(accessToken);
+		try {
+			const getSimulationsCase = new GetSimulationsCase(
+				this.jwt,
+				this.SimulationsRepository,
+			);
+			const getSimulationsResult =
+				await getSimulationsCase.getSimulations(accessToken);
 
-		// if ("message" in getSimulationsResult) {
-		//   return httpResponsePresenter.badRequest(getSimulationsResult);
-		// }
+			if ("message" in getSimulationsResult) {
+				return httpResponsePresenter.badRequest(getSimulationsResult);
+			}
 
-		return httpResponsePresenter.ok(getSimulationsResult);
+			return httpResponsePresenter.ok(getSimulationsResult);
+		} catch (error) {
+			if (error instanceof SimulationError) {
+				return httpResponsePresenter.badRequest({ message: error.message });
+			}
+
+			throw error;
+		}
 	}
 
 	async createSimulation(
@@ -47,9 +55,9 @@ export class SimulationsController {
 				totalValue,
 			);
 
-			// if ("message" in getSimulationsResult) {
-			//   return httpResponsePresenter.badRequest(getSimulationsResult);
-			// }
+			if ("message" in getSimulationsResult) {
+				return httpResponsePresenter.badRequest(getSimulationsResult);
+			}
 
 			return httpResponsePresenter.created(getSimulationsResult);
 		} catch (error) {

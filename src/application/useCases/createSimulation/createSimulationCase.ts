@@ -5,6 +5,7 @@ import { SimulationTotalValue } from "../../../domain/entities/Simulation/value 
 import { StudentId } from "../../../domain/value objects/student/studentId/studentId";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 import type { SimulationsRepository } from "../../repository/simulations/simulationsRepository";
+import type { RawSimulation } from "../../simulations/simulation";
 import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
 
 export class CreateSimulationCase {
@@ -18,7 +19,12 @@ export class CreateSimulationCase {
 		installmentsQuantity: number,
 		interestPerMonth: number,
 		totalValue: number,
-	) {
+	): Promise<
+		| RawSimulation
+		| {
+				message: string;
+		  }
+	> {
 		const tokenData = this.jwtTokens.verifyToken(
 			accessToken,
 			appEnv.accessTokenJwtSecret,
@@ -42,7 +48,16 @@ export class CreateSimulationCase {
 			monthlyInstallmentValue: monthlyInstallment.value,
 		});
 
-		return simulation;
+		const parsedSimulation: RawSimulation = {
+			studentId: simulation.studentId.value,
+			id: simulation.id.value,
+			totalValue: simulation.totalValue.value,
+			installmentsQuantity: simulation.installmentsQuantity.value,
+			interestPerMonth: simulation.interestPerMonth.value,
+			monthlyInstallmentValue: simulation.monthlyInstallmentValue.value,
+		};
+
+		return parsedSimulation;
 	}
 
 	#tokenPayloadTypeGuard(payload: unknown): payload is StudentToken {

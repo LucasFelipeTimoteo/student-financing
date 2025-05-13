@@ -12,7 +12,6 @@ import { GetStudentCase } from "../../../application/useCases/getStudent/getStud
 import { StudentError } from "../../../domain/entities/Student/errors/studentError";
 import { StudentEmail } from "../../../domain/value objects/student/studentEmail/studentEmail";
 import { StudentFirstName } from "../../../domain/value objects/student/studentFirstName/studentFirstName";
-import type { StudentId } from "../../../domain/value objects/student/studentId/studentId";
 import { StudentLastName } from "../../../domain/value objects/student/studentLastName/studentLastName";
 import { StudentPassword } from "../../../domain/value objects/student/studentPassword/studentPassword";
 
@@ -56,7 +55,7 @@ export class StudentController {
 	async editStudent(
 		partialStudent: Omit<RawStudent, "id">,
 		accessToken: string,
-	): Promise<HttpResponse<StudentId | null | MessageResponse>> {
+	): Promise<HttpResponse<MessageResponse>> {
 		try {
 			const validatedPartialStudent: partialStudent = {
 				...(typeof partialStudent.firstName === "string" && {
@@ -90,7 +89,13 @@ export class StudentController {
 				return httpResponsePresenter.badRequest(editUserResult);
 			}
 
-			return httpResponsePresenter.ok(editUserResult);
+			if (editUserResult === null) {
+				return httpResponsePresenter.ok({ message: "Nothing to change." });
+			}
+
+			return httpResponsePresenter.ok({
+				message: `successfully update use ${editUserResult.value}`,
+			});
 		} catch (error) {
 			if (error instanceof StudentError) {
 				return httpResponsePresenter.badRequest({ message: error.message });

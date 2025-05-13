@@ -1,19 +1,16 @@
-import {
-	Column,
-	Entity,
-	JoinColumn,
-	ManyToOne,
-	PrimaryGeneratedColumn,
-} from "typeorm";
-import { Student } from "./Student";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Simulation {
 	@PrimaryGeneratedColumn("uuid")
 	id!: string;
 
-	@ManyToOne(() => Student, { nullable: false })
-	@JoinColumn({ name: "student_id", referencedColumnName: "id" })
+	// TODO: A TIPAGEM GRADA PELA RELAÇÃO GERA CONFLITO COM A TIPAGEM ESPERADA, QUEBRANDO A INDEPENDÊNCIA DE LIBS EXTERNAS
+	// - manter sem relacionamento. Se der tempo, resolver esse problema
+
+	// @ManyToOne(() => Student, { nullable: false })
+	// @JoinColumn({ name: "studentId", referencedColumnName: "id" })
+	@Column({ nullable: false })
 	studentId!: string;
 
 	@Column("decimal", { precision: 15, scale: 2, nullable: false })

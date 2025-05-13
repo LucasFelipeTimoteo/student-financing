@@ -3,7 +3,7 @@ import type { StudentId } from "../../../domain/value objects/student/studentId/
 import type { RawSimulation } from "../../simulations/simulation";
 
 export interface SimulationsRepository {
-	getSimulations(studentId: StudentId): Promise<SimulationEntity>;
+	getSimulations(studentId: StudentId): Promise<SimulationEntity[] | null>;
 	createSimulation(
 		simulationValues: Omit<RawSimulation, "id">,
 	): Promise<SimulationEntity>;

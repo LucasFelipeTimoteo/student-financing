@@ -12,14 +12,32 @@ export class SimulationsRepositoryTypeORM implements SimulationsRepository {
 		private client: EntrypointDatabaseClients,
 	) {}
 
-	async getSimulations(studentId: StudentId): Promise<SimulationEntity> {
-		return new SimulationEntity({
-			id: "example-id",
-			studentId: studentId.value,
-			totalValue: 100000,
-			installmentsQuantity: 10,
-			interestPerMonth: 2,
+	async getSimulations(
+		studentId: StudentId,
+	): Promise<SimulationEntity[] | null> {
+		const typeORMCLient = await this.client;
+
+		const studentSimulations = await typeORMCLient.manager.find(Simulation, {
+			where: { studentId: studentId.value },
 		});
+
+		if (studentSimulations.length === 0) {
+			return null;
+		}
+
+		const parsedSimulations = studentSimulations.map(
+			(simulation) =>
+				new SimulationEntity({
+					id: simulation.id,
+					studentId: simulation.studentId,
+					totalValue: Number(simulation.totalValue),
+					installmentsQuantity: simulation.installmentsQuantity,
+					interestPerMonth: Number(simulation.interestPerMonth),
+					monthlyInstallmentValue: Number(simulation.monthlyInstallmentValue),
+				}),
+		);
+
+		return parsedSimulations;
 	}
 
 	async createSimulation({
@@ -38,6 +56,8 @@ export class SimulationsRepositoryTypeORM implements SimulationsRepository {
 
 		const typeORMCLient = await this.client;
 		const createdSimulation = await typeORMCLient.manager.save(simulation);
+
+		this.logger.debug(createdSimulation);
 
 		const validatedCreatedSimulation = new SimulationEntity({
 			id: createdSimulation.id,

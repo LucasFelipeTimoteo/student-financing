@@ -1,6 +1,8 @@
 import { StudentId } from "../../../domain/value objects/student/studentId/studentId";
 import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 import type { SimulationsRepository } from "../../repository/simulations/simulationsRepository";
+import type { MessageResponse } from "../../responses/general/message/messageResponse";
+import type { RawSimulation } from "../../simulations/simulation";
 import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
 
 export class GetSimulationsCase {
@@ -9,7 +11,9 @@ export class GetSimulationsCase {
 		private simulationsRepository: SimulationsRepository,
 	) {}
 
-	async getSimulations(accessToken: string) {
+	async getSimulations(
+		accessToken: string,
+	): Promise<RawSimulation[] | MessageResponse> {
 		const tokenData = this.jwtTokens.verifyToken(
 			accessToken,
 			appEnv.accessTokenJwtSecret,
@@ -21,7 +25,25 @@ export class GetSimulationsCase {
 		const studentId = new StudentId(tokenData.userId);
 		const simulations =
 			await this.simulationsRepository.getSimulations(studentId);
-		return simulations;
+
+		if (!simulations) {
+			return {
+				message: `Cannot find simulations for student ${studentId.value}`,
+			};
+		}
+
+		const parsedSimulations: RawSimulation[] = simulations.map(
+			(simulation) => ({
+				id: simulation.id.value,
+				studentId: simulation.studentId.value,
+				totalValue: simulation.totalValue.value,
+				installmentsQuantity: simulation.installmentsQuantity.value,
+				interestPerMonth: simulation.interestPerMonth.value,
+				monthlyInstallmentValue: simulation.monthlyInstallmentValue.value,
+			}),
+		);
+
+		return parsedSimulations;
 	}
 
 	#tokenPayloadTypeGuard(payload: unknown): payload is StudentToken {
