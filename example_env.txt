@@ -1,0 +1,23 @@
+# ========== APP ==============
+APP_LOCAL="docker"
+# APP_LOCAL="local_machine"
+APP_PORT=3000
+NODE_ENV="production"
+# NODE_ENV="development"
+DOCUMENTATION_APP_PORT=4000
+CORS_WHITELIST="*"
+
+# ======== DATABASE =============
+DATABASE_PORT=5432
+DATABASE_NAME=student
+DATABASE_HOST=postgres
+DATABASE_USER=postgres
+DATABASE_PASSWORD=
+DATABASE_URL="postgresql://postgres:@localhost:5432/student?schema=public"
+
+# =========== JWT ===============
+SALT=10
+REFRESH_TOKEN_TTL_DAYS="180"
+ACCESS_TOKEN_TTL_MINUTES="5"
+ACCESS_TOKEN_JWT_SECRET="87HDNWEPOF2HBKJLJHBT6tB6iuon82uhnuyn7Y8Iom88!"
+REFRESH_TOKEN_JWT_SECRET="NCBNbx66b3!!%%MMjbs8askdhSj4i$R8s6hnsjKDAsjsjbuYv"
