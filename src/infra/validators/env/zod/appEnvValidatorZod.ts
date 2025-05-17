@@ -1,39 +1,35 @@
 import { z } from "zod";
-import type {
-	AppMachineType,
-	NodeEnvs,
-} from "../../../../application/validation/env/appEnv/types/appEnvTypes";
+import type { EnvValues } from "../../../../application/validation/env/appEnv/types/appEnvTypes";
 import type { AppEnvValidator } from "../../../../application/validation/env/appEnv/types/appEnvValidator";
 
 class AppEnvValidatorZod implements AppEnvValidator {
-	stringValidation(envVar: unknown): string {
-		const schema = z.string().min(1);
-		const validStringVar = schema.parse(envVar);
+	validate(env: EnvValues): EnvValues {
+		env.APP_PORT = Number(env.APP_PORT);
+		env.DOCUMENTATION_APP_PORT = Number(env.DOCUMENTATION_APP_PORT);
+		env.DATABASE_PORT = Number(env.DATABASE_PORT);
+		env.SALT = Number(env.SALT);
 
-		return validStringVar;
-	}
+		const schema = z.object({
+			NODE_ENV: z.enum(["development", "production", "test"]),
+			APP_LOCAL: z.enum(["docker", "local_machine"]),
+			APP_PORT: z.number().min(1),
+			DOCUMENTATION_APP_PORT: z.number().min(1),
+			CORS_WHITELIST: z.string().min(1),
+			ACCESS_TOKEN_JWT_SECRET: z.string().min(1),
+			ACCESS_TOKEN_TTL_MINUTES: z.string().min(1),
+			REFRESH_TOKEN_JWT_SECRET: z.string().min(1),
+			REFRESH_TOKEN_TTL_DAYS: z.string().min(1),
+			SALT: z.number().min(1),
+			DATABASE_HOST: z.string().min(1),
+			DATABASE_NAME: z.string().min(1),
+			DATABASE_PORT: z.number().min(1),
+			DATABASE_USER: z.string().min(1),
+			DATABASE_URL: z.string().min(1),
+			DATABASE_PASSWORD: z.string().optional(),
+		});
 
-	numericStringValidation(envVar: unknown): string {
-		const notNumericStringErrorMessage =
-			"Must be a numeric string (only contain 0-9 digits)";
-		const schema = z.string().regex(/^[0-9]+$/, notNumericStringErrorMessage);
-		const validNumericStringVar = schema.parse(envVar);
-
-		return validNumericStringVar;
-	}
-
-	appLocalValidation(machineLocalEnv: unknown): AppMachineType {
-		const schema = z.enum(["docker", "local_machine"]);
-		const validAppLocal = schema.parse(machineLocalEnv);
-
-		return validAppLocal;
-	}
-
-	nodeEnvValidation(nodeEnv: unknown): NodeEnvs {
-		const schema = z.enum(["development", "production", "test"]);
-		const validNodeEnv = schema.parse(nodeEnv);
-
-		return validNodeEnv;
+		const validatedEnv = schema.parse(env);
+		return validatedEnv;
 	}
 }
 

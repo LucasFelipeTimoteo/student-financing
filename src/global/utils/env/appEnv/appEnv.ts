@@ -10,11 +10,11 @@ import { appEnvValidatorZod } from "../../../../infra/validators/env/zod/appEnvV
 
 export class AppEnv {
 	appLocal: AppMachineType;
-	appPort: string;
-	documentationAppPort: string;
+	appPort: number;
+	documentationAppPort: number;
 	nodeEnv: NodeEnvs;
 	corsWhitelist: string;
-	salt: string;
+	salt: number;
 	accessTokenJwtSecret: string;
 	refreshTokenTTLDays: string;
 	accessTokenTTLMinutes: string;
@@ -30,80 +30,23 @@ export class AppEnv {
 		appEnvValidator: AppEnvValidator,
 		public envValues: EnvValues,
 	) {
-		this.appLocal = this.#appLocalValidation(
-			this.envValues.APP_LOCAL,
-			appEnvValidator,
-		);
-		this.nodeEnv = this.#nodeEnvValidation(
-			this.envValues.NODE_ENV,
-			appEnvValidator,
-		);
-		this.appPort = this.#numericStringValidation(
-			this.envValues.APP_PORT,
-			appEnvValidator,
-		);
-		this.corsWhitelist = this.#stringValidation(
-			this.envValues.CORS_WHITELIST,
-			appEnvValidator,
-		);
-		this.documentationAppPort = this.#numericStringValidation(
-			this.envValues.DOCUMENTATION_APP_PORT,
-			appEnvValidator,
-		);
-
-		this.refreshTokenTTLDays = this.#numericStringValidation(
-			this.envValues.REFRESH_TOKEN_TTL_DAYS,
-			appEnvValidator,
-		);
-
-		this.accessTokenTTLMinutes = this.#numericStringValidation(
-			this.envValues.ACCESS_TOKEN_TTL_MINUTES,
-			appEnvValidator,
-		);
-
-		this.salt = this.#numericStringValidation(
-			this.envValues.SALT,
-			appEnvValidator,
-		);
-
-		this.accessTokenJwtSecret = this.#stringValidation(
-			this.envValues.ACCESS_TOKEN_JWT_SECRET,
-			appEnvValidator,
-		);
-
-		this.refreshTokenJwtSecret = this.#stringValidation(
-			this.envValues.REFRESH_TOKEN_JWT_SECRET,
-			appEnvValidator,
-		);
-
-		this.databaseHost = this.#stringValidation(
-			this.envValues.DATABASE_HOST,
-			appEnvValidator,
-		);
-
-		this.databaseName = this.#stringValidation(
-			this.envValues.DATABASE_NAME,
-			appEnvValidator,
-		);
-
-		this.databasePassword = this.envValues.DATABASE_PASSWORD;
-
-		this.databasePort = Number(
-			this.#numericStringValidation(
-				this.envValues.DATABASE_PORT,
-				appEnvValidator,
-			),
-		);
-
-		this.databaseUser = this.#stringValidation(
-			this.envValues.DATABASE_USER,
-			appEnvValidator,
-		);
-
-		this.databaseUrl = this.#stringValidation(
-			this.envValues.DATABASE_URL,
-			appEnvValidator,
-		);
+		const validEnv = appEnvValidator.validate(envValues);
+		this.nodeEnv = validEnv.NODE_ENV;
+		this.appLocal = validEnv.APP_LOCAL;
+		this.appPort = validEnv.APP_PORT;
+		this.documentationAppPort = validEnv.DOCUMENTATION_APP_PORT;
+		this.corsWhitelist = validEnv.CORS_WHITELIST;
+		this.accessTokenJwtSecret = validEnv.ACCESS_TOKEN_JWT_SECRET;
+		this.accessTokenTTLMinutes = validEnv.ACCESS_TOKEN_TTL_MINUTES;
+		this.refreshTokenJwtSecret = validEnv.REFRESH_TOKEN_JWT_SECRET;
+		this.refreshTokenTTLDays = validEnv.REFRESH_TOKEN_TTL_DAYS;
+		this.salt = validEnv.SALT;
+		this.databaseHost = validEnv.DATABASE_HOST;
+		this.databaseName = validEnv.DATABASE_NAME;
+		this.databaseUser = validEnv.DATABASE_USER;
+		this.databasePassword = validEnv.DATABASE_PASSWORD;
+		this.databasePort = validEnv.DATABASE_PORT;
+		this.databaseUrl = validEnv.DATABASE_URL;
 	}
 
 	getValidatedEnvValues() {
@@ -111,31 +54,6 @@ export class AppEnv {
 		protectInstance(validatedValues, false);
 
 		return validatedValues;
-	}
-
-	#stringValidation(envVar: unknown, appEnvValidator: AppEnvValidator): string {
-		return appEnvValidator.stringValidation(envVar);
-	}
-
-	#numericStringValidation(
-		envVar: unknown,
-		appEnvValidator: AppEnvValidator,
-	): string {
-		return appEnvValidator.numericStringValidation(envVar);
-	}
-
-	#appLocalValidation(
-		machineLocalEnv: unknown,
-		appEnvValidator: AppEnvValidator,
-	): AppMachineType {
-		return appEnvValidator.appLocalValidation(machineLocalEnv);
-	}
-
-	#nodeEnvValidation(
-		nodeEnv: unknown,
-		appEnvValidator: AppEnvValidator,
-	): NodeEnvs {
-		return appEnvValidator.nodeEnvValidation(nodeEnv);
 	}
 }
 
