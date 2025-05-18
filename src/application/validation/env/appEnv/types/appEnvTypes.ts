@@ -6,15 +6,15 @@ export type EnvValues = {
 	CORS_WHITELIST: string;
 	ACCESS_TOKEN_JWT_SECRET: string;
 	REFRESH_TOKEN_JWT_SECRET: string;
-	REFRESH_TOKEN_TTL_DAYS: string;
-	ACCESS_TOKEN_TTL_MINUTES: string;
+	REFRESH_TOKEN_TTL_DAYS: number;
+	ACCESS_TOKEN_TTL_MINUTES: number;
 	SALT: number;
 	DATABASE_PORT: number;
 	DATABASE_NAME: string;
 	DATABASE_HOST: string;
 	DATABASE_USER: string;
 	DATABASE_PASSWORD?: string;
-	DATABASE_URL: string;
+	// DATABASE_URL: string;
 };
 
 export type NodeEnvs = "production" | "development" | "test";

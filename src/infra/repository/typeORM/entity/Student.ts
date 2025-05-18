@@ -1,6 +1,9 @@
 import { Check, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: "students" })
+export const typeormStudentTableName =
+	process.env.NODE_ENV === "test" ? "students_test" : "students";
+
+@Entity({ name: typeormStudentTableName })
 export class Student {
 	@PrimaryGeneratedColumn("uuid")
 	id!: string;

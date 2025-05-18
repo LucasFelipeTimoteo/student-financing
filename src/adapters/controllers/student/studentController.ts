@@ -94,7 +94,7 @@ export class StudentController {
 			}
 
 			return httpResponsePresenter.ok({
-				message: `successfully update use ${editUserResult.value}`,
+				message: `successfully update student ${editUserResult.value}`,
 			});
 		} catch (error) {
 			if (error instanceof StudentError) {

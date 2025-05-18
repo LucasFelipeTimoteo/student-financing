@@ -29,7 +29,7 @@ export class EditStudentCase {
 		const studentId = new StudentId(tokenData.userId);
 		const parsedPartialStudent = { ...this.partialStudent };
 		if (this.partialStudent.password?.value) {
-			const salt = this.passwordHasher.genSaltSync(Number(appEnv.salt));
+			const salt = this.passwordHasher.genSaltSync(appEnv.salt);
 			const hashedPassword = this.passwordHasher.hashSync(
 				this.partialStudent.password.value,
 				salt,

@@ -21,7 +21,7 @@ export class RegisterCase {
 	) {}
 
 	async register() {
-		const hashSalt = await this.passwordHasher.genSalt(Number(appEnv.salt));
+		const hashSalt = await this.passwordHasher.genSalt(appEnv.salt);
 		const hashedPasswordRaw = await this.passwordHasher.hashAsync(
 			this.password.value,
 			hashSalt,

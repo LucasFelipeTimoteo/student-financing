@@ -36,9 +36,8 @@ export class LoginCase {
 
 		this.logger.debug(`Successfully login with user: ${loginResult.id.value}`);
 
-		const accessTokenTTLInSeconds = Number(appEnv.accessTokenTTLMinutes) * 60;
-		const refreshTokenTTLInSeconds =
-			Number(appEnv.refreshTokenTTLDays) * 24 * 60 * 60;
+		const accessTokenTTLInSeconds = appEnv.accessTokenTTLMinutes * 60;
+		const refreshTokenTTLInSeconds = appEnv.refreshTokenTTLDays * 24 * 60 * 60;
 
 		const tokenPayload = { userId: loginResult.id.value };
 		const accessToken = this.JWTTokens.genToken(

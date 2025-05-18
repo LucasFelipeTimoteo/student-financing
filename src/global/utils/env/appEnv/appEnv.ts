@@ -16,15 +16,14 @@ export class AppEnv {
 	corsWhitelist: string;
 	salt: number;
 	accessTokenJwtSecret: string;
-	refreshTokenTTLDays: string;
-	accessTokenTTLMinutes: string;
+	refreshTokenTTLDays: number;
+	accessTokenTTLMinutes: number;
 	refreshTokenJwtSecret: string;
 	databasePort: number;
 	databaseName: string;
 	databaseHost: string;
 	databaseUser: string;
 	databasePassword?: string;
-	databaseUrl: string;
 
 	constructor(
 		appEnvValidator: AppEnvValidator,
@@ -46,7 +45,6 @@ export class AppEnv {
 		this.databaseUser = validEnv.DATABASE_USER;
 		this.databasePassword = validEnv.DATABASE_PASSWORD;
 		this.databasePort = validEnv.DATABASE_PORT;
-		this.databaseUrl = validEnv.DATABASE_URL;
 	}
 
 	getValidatedEnvValues() {

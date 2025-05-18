@@ -6,21 +6,26 @@ import { Simulation } from "../entity/Simulation";
 import { Student } from "../entity/Student";
 
 export class TypeORMClient {
-	AppDataSource = new DataSource({
-		type: "postgres",
-		host: appEnv.appLocal === "docker" ? appEnv.databaseHost : "localhost",
-		port: appEnv.databasePort,
-		username: appEnv.databaseUser,
-		password: appEnv.databasePassword,
-		database: appEnv.databaseName,
-		synchronize: appEnv.nodeEnv !== "production",
-		logging: false,
-		entities: [Student, Simulation],
-		migrations: [],
-		subscribers: [],
-	});
+	AppDataSource: DataSource;
 
-	constructor(private logger: logger) {}
+	constructor(
+		private logger: logger,
+		public dbConfig?: { database: string },
+	) {
+		this.AppDataSource = new DataSource({
+			type: "postgres",
+			host: appEnv.appLocal === "docker" ? appEnv.databaseHost : "localhost",
+			port: appEnv.databasePort,
+			username: appEnv.databaseUser,
+			password: appEnv.databasePassword,
+			database: dbConfig?.database || appEnv.databaseName,
+			synchronize: appEnv.nodeEnv !== "production",
+			logging: false,
+			entities: [Student, Simulation],
+			migrations: [],
+			subscribers: [],
+		});
+	}
 
 	async initialize() {
 		this.logger.info(
