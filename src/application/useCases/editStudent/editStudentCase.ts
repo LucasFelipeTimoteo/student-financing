@@ -6,6 +6,7 @@ import type { logger } from "../../logger/logger";
 import type { PasswordHasher } from "../../parsers/password/hasing/passwordHasher";
 import type { StudentRepository } from "../../repository/student/studentRepository";
 import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
+import { JWTTokensError } from "../../tokens/jwt/errors/JWTTokensError";
 
 export class EditStudentCase {
 	constructor(
@@ -23,7 +24,7 @@ export class EditStudentCase {
 			appEnv.accessTokenJwtSecret,
 		);
 		if (!this.#tokenPayloadTypeGuard(tokenData)) {
-			return { message: "Invalid token" };
+			return JWTTokensError.invalidTokenResponse;
 		}
 
 		const studentId = new StudentId(tokenData.userId);

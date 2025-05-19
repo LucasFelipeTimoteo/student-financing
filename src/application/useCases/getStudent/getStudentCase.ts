@@ -4,6 +4,7 @@ import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 import type { StudentRepository } from "../../repository/student/studentRepository";
 import type { MessageResponse } from "../../responses/general/message/messageResponse";
 import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
+import { JWTTokensError } from "../../tokens/jwt/errors/JWTTokensError";
 
 export class GetStudentCase {
 	constructor(
@@ -18,14 +19,14 @@ export class GetStudentCase {
 			appEnv.accessTokenJwtSecret,
 		);
 		if (!this.#tokenPayloadTypeGuard(tokenData)) {
-			return { message: "Invalid token" };
+			return JWTTokensError.invalidTokenResponse;
 		}
 
 		const studentId = new StudentId(tokenData.userId);
 		const student = await this.studentRepository.getStudent(studentId);
 
 		if (!student) {
-			return { message: "Invalid token" };
+			return JWTTokensError.invalidTokenResponse;
 		}
 
 		const safeStudent: Omit<StudentEntity, "password"> = {

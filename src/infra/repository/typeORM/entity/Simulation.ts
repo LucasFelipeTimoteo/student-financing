@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-export const simulationsTableName =
+export const typeormSimulationsTableName =
 	process.env.NODE_ENV === "test" ? "simulations_test" : "simulations";
 
-@Entity({ name: simulationsTableName })
+@Entity({ name: typeormSimulationsTableName })
 export class Simulation {
 	@PrimaryGeneratedColumn("uuid")
 	id!: string;

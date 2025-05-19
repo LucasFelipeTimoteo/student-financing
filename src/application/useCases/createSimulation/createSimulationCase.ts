@@ -7,6 +7,7 @@ import { appEnv } from "../../../global/utils/env/appEnv/appEnv";
 import type { SimulationsRepository } from "../../repository/simulations/simulationsRepository";
 import type { RawSimulation } from "../../simulations/simulation";
 import type { JWTTokens, StudentToken } from "../../tokens/jwt/JWTTokens";
+import { JWTTokensError } from "../../tokens/jwt/errors/JWTTokensError";
 
 export class CreateSimulationCase {
 	constructor(
@@ -30,7 +31,7 @@ export class CreateSimulationCase {
 			appEnv.accessTokenJwtSecret,
 		);
 		if (!this.#tokenPayloadTypeGuard(tokenData)) {
-			return { message: "Invalid token" };
+			return JWTTokensError.invalidTokenResponse;
 		}
 
 		const studentId = new StudentId(tokenData.userId);

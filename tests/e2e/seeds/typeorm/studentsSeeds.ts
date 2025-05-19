@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { Student, typeormStudentTableName } from "../../../../src/infra/repository/typeORM/entity/Student";
-import { Simulation, simulationsTableName } from "../../../../src/infra/repository/typeORM/entity/Simulation";
+import { Simulation, typeormSimulationsTableName } from "../../../../src/infra/repository/typeORM/entity/Simulation";
 
 class TypeORMSeeds {
   private uuid = crypto.randomUUID()
@@ -54,7 +54,7 @@ class TypeORMSeeds {
 
     await Promise.all([
       client.createQueryRunner().dropTable(typeormStudentTableName, true),
-      client.createQueryRunner().dropTable(simulationsTableName, true)
+      client.createQueryRunner().dropTable(typeormSimulationsTableName, true)
     ])
 
     await client.destroy()

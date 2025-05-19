@@ -7,15 +7,21 @@ import { TypeORMClient } from "../../src/infra/repository/typeORM/service/typeOR
 import { typeORMSeeds } from './seeds/typeorm/studentsSeeds';
 import { JWTJsonWebToken } from "../../src/infra/tokens/jwt/jsonWebTokenLib/JWTJsonWebToken";
 import { appEnv } from "../../src/global/utils/env/appEnv/appEnv";
+import { typeormSimulationsTableName } from "../../src/infra/repository/typeORM/entity/Simulation";
+import { JWTTokensError } from "../../src/application/tokens/jwt/errors/JWTTokensError";
 
 const jwt = new JWTJsonWebToken()
 const typeORMClient = new TypeORMClient(pinoLogger).initialize();
 const application = Appfactory(pinoLogger, typeORMClient);
 const app = new ExpressEntryPoint(application, pinoLogger, typeORMClient).configApp()
+const tokenCustomheaderName = "X-Custom-Token"
 
 beforeAll(() => {
 	if (typeormStudentTableName !== "students_test") {
-		throw Error("test database shoud be used")
+		throw Error("test database shoud be used to Students")
+	}
+	if (typeormSimulationsTableName !== "simulations_test") {
+		throw Error("test database shoud be used to simulations")
 	}
 })
 
@@ -275,7 +281,7 @@ describe("Student endpoints", () => {
 				.post('/api/me')
 				.send({})
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is has 0 length", async () => {
@@ -283,7 +289,7 @@ describe("Student endpoints", () => {
 				.post('/api/me')
 				.send({ accessToken: "" })
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is a string that is not a valid token", async () => {
@@ -291,7 +297,7 @@ describe("Student endpoints", () => {
 				.post('/api/me')
 				.send({ accessToken: "testetken12234" })
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is expired", async () => {
@@ -300,7 +306,7 @@ describe("Student endpoints", () => {
 				.post('/api/me')
 				.send({ accessToken: expiredToken })
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 	});
 
@@ -331,7 +337,7 @@ describe("Student endpoints", () => {
 					newData
 				})
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is has 0 length", async () => {
@@ -339,7 +345,7 @@ describe("Student endpoints", () => {
 				.post('/api/me')
 				.send({ accessToken: "", newData })
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is a string that is not a valid token", async () => {
@@ -347,7 +353,7 @@ describe("Student endpoints", () => {
 				.post('/api/me')
 				.send({ accessToken: "testetken12234", newData })
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is expired", async () => {
@@ -356,7 +362,7 @@ describe("Student endpoints", () => {
 				.post('/api/me')
 				.send({ accessToken: expiredToken, newData })
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 	});
@@ -365,6 +371,7 @@ describe("Student endpoints", () => {
 
 
 describe("Simulation endpoints", () => {
+
 	const validAccessToken = jwt.genToken({ userId: typeORMSeeds.defaultStudent.id }, appEnv.accessTokenJwtSecret, appEnv.accessTokenTTLMinutes)
 
 	describe("GET /api/simulations", () => {
@@ -372,7 +379,7 @@ describe("Simulation endpoints", () => {
 		it("Should return the corect simulation related with defaultUser", async () => {
 			await request(app)
 				.get("/api/simulations")
-				.send({ accessToken: validAccessToken })
+				.set(tokenCustomheaderName, validAccessToken)
 				.expect(200)
 				.expect((res) => {
 					expect(res.body[0]).toMatchObject(typeORMSeeds.defaultSimulation)
@@ -382,30 +389,29 @@ describe("Simulation endpoints", () => {
 		it("Should throw if when accessToken is invalid cause it is not defined", async () => {
 			await request(app)
 				.get("/api/simulations")
-				.send({})
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is has 0 length", async () => {
 			await request(app)
 				.get("/api/simulations")
-				.send({ accessToken: "" })
+				.set(tokenCustomheaderName, "")
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is a string that is not a valid token", async () => {
 			await request(app)
 				.get("/api/simulations")
-				.send({ accessToken: "testetken12234" })
+				.set(tokenCustomheaderName, "invalidtoken123")
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 	});
 
 	describe("POST /api/simulations", () => {
-		//HAPPY PATH
+		// 	//HAPPY PATH
 		it("Should create a simulation related with defaultUser", async () => {
 			await request(app)
 				.post("/api/simulations")
@@ -425,25 +431,39 @@ describe("Simulation endpoints", () => {
 		it("Should throw if when accessToken is invalid cause it is not defined", async () => {
 			await request(app)
 				.post("/api/simulations")
-				.send({})
+				.send({
+					totalValue: 50000.00,
+					installmentsQuantity: 24,
+					interestPerMonth: 0.01
+				})
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is has 0 length", async () => {
 			await request(app)
 				.post("/api/simulations")
-				.send({ accessToken: "" })
+				.send({
+					accessToken: "",
+					totalValue: 50000.00,
+					installmentsQuantity: 24,
+					interestPerMonth: 0.01
+				})
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 
 		it("Should throw if when accessToken is invalid cause it is a string that is not a valid token", async () => {
 			await request(app)
 				.post("/api/simulations")
-				.send({ accessToken: "testetken12234" })
+				.send({
+					accessToken: "invalidToken123",
+					totalValue: 50000.00,
+					installmentsQuantity: 24,
+					interestPerMonth: 0.01
+				})
 				.expect(400)
-				.expect({ message: "Invalid token" })
+				.expect(JWTTokensError.invalidTokenResponse)
 		})
 	});
 

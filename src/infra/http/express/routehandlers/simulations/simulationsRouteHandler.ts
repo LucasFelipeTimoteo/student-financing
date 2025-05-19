@@ -15,7 +15,7 @@ export class SimulationsRouteHandler {
 		next: NextFunction,
 	) {
 		try {
-			const { accessToken } = req.body;
+			const accessToken = req.header("X-Custom-Token");
 			const getSimulationsResponse =
 				await this.simulationsController.getSimulations(accessToken);
 

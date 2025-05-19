@@ -1,8 +1,6 @@
-export interface getSimumationsExpressRequest {
-	body: {
-		accessToken: string;
-	};
-}
+import type { Request } from "express";
+
+export interface getSimumationsExpressRequest extends Request {}
 
 export interface createSimulationExpressRequest {
 	body: {

@@ -1,6 +1,7 @@
 import type { logger } from "../../../application/logger/logger";
 import type { SimulationsRepository } from "../../../application/repository/simulations/simulationsRepository";
 import type { JWTTokens } from "../../../application/tokens/jwt/JWTTokens";
+import { JWTTokensError } from "../../../application/tokens/jwt/errors/JWTTokensError";
 import { CreateSimulationCase } from "../../../application/useCases/createSimulation/createSimulationCase";
 import { GetSimulationsCase } from "../../../application/useCases/getSimulations/getSimulationsCase";
 import { SimulationError } from "../../../domain/entities/Simulation/errors/simulation";
@@ -14,8 +15,14 @@ export class SimulationsController {
 		private SimulationsRepository: SimulationsRepository,
 	) {}
 
-	async getSimulations(accessToken: string) {
+	async getSimulations(accessToken: unknown) {
 		try {
+			if (!accessToken || typeof accessToken !== "string") {
+				return httpResponsePresenter.badRequest(
+					JWTTokensError.invalidTokenResponse,
+				);
+			}
+
 			const getSimulationsCase = new GetSimulationsCase(
 				this.jwt,
 				this.SimulationsRepository,

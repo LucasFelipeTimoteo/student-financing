@@ -68,6 +68,11 @@ npm run test:e2e
 ```sh
 npm run test:e2e:watch
 ```
+## Documentação
+swagger docs:
+```sh
+npm run api-docs
+```
 
 ## Algumas explicações tecnicas
 - geral: ver no arquivo `technical-explanations.md`
@@ -75,11 +80,6 @@ npm run test:e2e:watch
 
 ## Pontos a melhorar
 - Sistema de error handling não é totalmente modular, depende do express
-- Documentação só cobre os casos de sucesso (faltou tempo)
 
 ## TODO (Coisas que não deu tempo de implementar ou resolver)
-- maior cobertura de testes unitários
-
 - o studentId da tabela simulation não é uma foreign key, pois a ORM gera uma tipagem diferente em formato de objeto ao invés do tipo primitivo que espero receber, o que quebra a aplicação caso eu continue mantendo as regras de negócio da aplicação sem referência a tipagem de libs
-
-- Adicionar uma documentação OpenAPI (Swagger) com todas as rotas e possiveis respostas

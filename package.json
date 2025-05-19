@@ -12,7 +12,7 @@
     "test:e2e:watch": "jest --bail --runInBand  --watchAll --projects ./tests/e2e",
     "start:dev": "nodemon src/infra/http/express/index.ts",
     "start:prod": "node build/infra/http/express/index.js",
-    "api-docs": "nodemon docs/api/openApi/apiDocs.ts",
+    "api-docs": "nodemon docs/swagger/index.ts",
     "lint-staged": "lint-staged",
     "lint:check": "biome lint .",
     "format:fix": "biome format --write .",
