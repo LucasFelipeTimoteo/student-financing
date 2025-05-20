@@ -57,8 +57,6 @@ export class SimulationsRepositoryTypeORM implements SimulationsRepository {
 		const typeORMCLient = await this.client;
 		const createdSimulation = await typeORMCLient.manager.save(simulation);
 
-		this.logger.debug(createdSimulation);
-
 		const validatedCreatedSimulation = new SimulationEntity({
 			id: createdSimulation.id,
 			studentId: createdSimulation.studentId,
