@@ -265,15 +265,18 @@
         "properties": {
           "firstName": {
             "type": "string",
-            "minLength": 2
+            "minLength": 2,
+            "example": "John"
           },
           "lastName": {
             "type": "string",
-            "minLength": 2
+            "minLength": 2,
+            "example": "Doe"
           },
           "email": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "example": "johndoe@email.com"
           },
           "password": {
             "example": "12345678abc",
@@ -291,10 +294,12 @@
         "properties": {
           "email": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "example": "johndoe@email.com"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "example": "12345678abc"
           }
         }
       },
@@ -360,14 +365,17 @@
             "type": "object",
             "properties": {
               "firstName": {
+                "example": "John",
                 "type": "string",
                 "minLength": 2
               },
               "lastName": {
+                "example": "Doe",
                 "type": "string",
                 "minLength": 2
               },
               "email": {
+                "example": "johndoen@email.com",
                 "type": "string",
                 "format": "email"
               },
@@ -427,8 +435,7 @@
           "interestPerMonth"
         ],
         "example": {
-          "id": "91ee9716-7ff9-4653-90e9-103aa31da013",
-          "studentId": "012919d4-b269-4b00-a344-f6440837f6ce",
+          "accessToken": "mytoken",
           "totalValue": 50000,
           "installmentsQuantity": 24,
           "interestPerMonth": 0.015,
